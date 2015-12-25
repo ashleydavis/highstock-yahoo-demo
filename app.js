@@ -108,7 +108,7 @@ $(function() {
                             text: 'All'
                         }
                     ],
-                    inputEnabled: false, // it supports only days
+                    inputEnabled: true,
                     selected: 4 // all
                 },
 

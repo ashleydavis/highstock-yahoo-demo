@@ -7,8 +7,11 @@ $(function() {
     //
     var loadHighstockData = function (code, options) {
         return loadYahooData(code, options)
-            .then(function (data) {
-                var reversed = Enumerable.from(data).reverse().toArray();
+            .then(function (dataFrame) {
+                //todo: data-forge needs a reverse fn.
+                var reversed = Enumerable.from(dataFrame.toObjects())
+                    .reverse()
+                    .toArray();
 
                 return {
 
@@ -234,7 +237,7 @@ $(function() {
                 resizeChart();
             })
             .catch(function (err) {
-                console.error(err);  
+                console.error(err.stack || err);  
             });
     };
 

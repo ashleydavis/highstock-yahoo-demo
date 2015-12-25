@@ -74,31 +74,24 @@ var parseYahooCsv = function (csv) {
         .toArray();
 
     var header = lines[0];
-
-    return Enumerable.from(lines)
+    var rows = Enumerable.from(lines)
         .skip(1) // Cut out header.
         .select(function (cols) {
-            return Enumerable.from(header)
-                .select(function (columnName, index) {
-                    var value = cols[index];
+            return Enumerable.from(cols)
+                .select(function (value, index) {
                     if (index === 0) {
                         value = moment(value).toDate(); // Treat first column as date.
                     }
                     else {
                         value = parseFloat(value); // Every other column is a number.
                     }
-                    return [columnName, value];
+                    return value;
                 })
-                .toObject(
-                    function (pair) {
-                        return pair[0];
-                    },
-                    function (pair) {
-                        return pair[1];
-                    }
-                );
+                .toArray();
         })
         .toArray();
+
+    return new dataForge.DataFrame({ columnNames: header, rows: rows });
 };
 
 // 

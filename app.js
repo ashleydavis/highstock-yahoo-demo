@@ -8,9 +8,11 @@ $(function() {
     var loadHighstockData = function (code, options) {
         return loadYahooData(code, options)
             .then(function (data) {
+                var reversed = Enumerable.from(data).reverse().toArray();
+
                 return {
-                    price: Enumerable.from(data)
-                        .reverse() //todo: move to load data.
+
+                    price: Enumerable.from(reversed)
                         .select(function (entry) {
                             var time = entry.Date.getTime();
                             return [
@@ -22,8 +24,8 @@ $(function() {
                             ];
                         })
                         .toArray(),
-                    volume: Enumerable.from(data)
-                        .reverse()
+
+                    volume: Enumerable.from(reversed)
                         .select(function (entry) {
                             return [
                                 entry.Date.getTime(),

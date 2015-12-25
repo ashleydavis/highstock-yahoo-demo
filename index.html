@@ -23,6 +23,22 @@
 <script type="text/javascript">//<![CDATA[
 
 $(function() {
+  var code = 'ABC';
+  var yahooUrl = 'http://ichart.yahoo.com/table.csv?s=' + code + '.AX';
+  var proxyUrl = 'http://cors.io/?u=' + encodeURIComponent(yahooUrl);
+  $.ajax({
+      type: 'GET',
+      url: proxyUrl, 
+      dataType: 'text',
+      crossDomain: true,
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (textStatus, err) {
+        console.error(arguments);
+      },
+  });
+
   /**
    * Load new data depending on the selected min and max
    */

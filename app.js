@@ -1,4 +1,4 @@
-'use strict';
+    'use strict';
 
 $(function() {
 
@@ -13,30 +13,48 @@ $(function() {
                     .reverse()
                     .toArray();
 
-                return {
+                var df = new dataForge.DataFrame({ rows: reversed });
 
-                    price: Enumerable.from(reversed)
+                var origGetColumnsSubset = df.getColumnsSubset;
+
+                var toHighstockOHLC = function () { //todo: need to be on BaseDataFrame
+                    //todo: assert 5 columns.
+                    var self = this;
+                    return Enumerable.from(self.toValues())
                         .select(function (entry) {
-                            var time = entry.Date.getTime();
+                            var time = entry[0].getTime();
                             return [
                                 time,
-                                entry.Open,
-                                entry.High,
-                                entry.Low,
-                                entry.Close,
+                                entry[1],
+                                entry[2],
+                                entry[3],
+                                entry[4],
                             ];
                         })
-                        .toArray(),
+                        .toArray();
+                };
 
-                    volume: Enumerable.from(reversed)
+                var toHighstock = function () { //todo: need to be on BaseDataFrame
+                    //todo: assert 2 columns.
+                    var self = this;
+                    return Enumerable.from(self.toValues())
                         .select(function (entry) {
                             return [
-                                entry.Date.getTime(),
-                                entry.Volume,
+                                entry[0].getTime(),
+                                entry[1],
                             ];
                         })
-                        .toArray(),
+                        .toArray();
                 };
+
+                df.getColumnsSubset = function (columnNames) { //todo: shouldn't have to replace this.
+                    var newDf = origGetColumnsSubset.call(this, columnNames);
+                    newDf.toHighstockOHLC = toHighstockOHLC;
+                    newDf.toHighstock = toHighstock;
+                    return newDf;
+                };
+
+                return df;
             });
     };
 
@@ -79,9 +97,12 @@ $(function() {
                 fromDate: new Date(e.min),
                 toDate: new Date(e.max),
             })
-            .then(function (data) {
-                chart.series[0].setData(data.price);
-                chart.series[1].setData(data.volume);
+            .then(function (dataFrame) {
+                var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
+                var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
+
+                chart.series[0].setData(price);
+                chart.series[1].setData(volume);
                 chart.hideLoading();
             })
             .catch(function (err) {
@@ -107,9 +128,9 @@ $(function() {
         console.log('Loading ' + code);
 
         loadHighstockData(code, {})
-            .then(function (data) {
-                var price = data.price;
-                var volume = data.volume;
+            .then(function (dataFrame) {
+                var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
+                var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
 
                 var groupingUnits = [
                     [

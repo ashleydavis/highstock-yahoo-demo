@@ -37,24 +37,34 @@ $(function() {
             });
     };
 
-    $("#company").change(function() {
+    //
+    // Destroy the existing chart.
+    //
+    var destroyChart = function () {
         var chart = $('#container').highcharts();
         if (chart) {
             chart.destroy();
         }
+    };
+
+    //
+    // Destroy and reload the chart.
+    //
+    var reloadChart = function () {
+        destroyChart();
         loadChart();
+    };
+
+    $("#company").change(function() {
+        reloadChart();
     });
 
     $('#loadChart').click(function () {
-        var chart = $('#container').highcharts();
-        if (chart) {
-            chart.destroy();
-        }
-        loadChart();
+        reloadChart();
     });
 
     //
-    // Load new data depending on the selected min and max
+    // Load new data depending on the selected date range.
     //
     var afterSetExtremes = function(e) {
 
@@ -77,6 +87,9 @@ $(function() {
             });
     };
 
+    //
+    // Load the chart.
+    //
     var loadChart = function () {
 
         var code = $("#company").val();

@@ -48,6 +48,59 @@ var formatYahooUrl = function (code, options) {
     return url;
 };
 
+//
+// Parse CSV data from Yahoo API.
+//
+var parseYahooCsv = function (csv) {
+    var lines = Enumerable.from(
+            csv.split('\n')
+        )
+        .select(function (row) {
+            return Enumerable.from(
+                    row.split(',')
+                )
+                .select(function (col) {
+                    return col.trim();
+                })
+                .toArray();
+        })
+        .where(function (cols) {
+            if (cols.length > 1) {
+                return true;
+            }
+            else if (cols.length == 1) {
+                return cols[0].length > 0;
+            }
+            else {
+                return false;
+            }
+        });
+
+    var header = lines.take(1);
+
+    var parsed = lines
+        .skip(1) // Cut out header.
+        .select(function (cols) {
+            chai.assert(cols.length === 7);
+            return [
+                moment(cols[0]).toDate(),
+                parseFloat(cols[1]),
+                parseFloat(cols[2]),
+                parseFloat(cols[3]),
+                parseFloat(cols[4]),
+                parseInt(cols[5]),
+                parseFloat(cols[6]),
+            ];
+        })
+        .toArray();
+
+    var rows = header
+        .concat(parsed)
+        .toArray();
+
+    return rows;
+};
+
 // 
 // Load CSV data from Yahoo.
 //
@@ -63,7 +116,7 @@ var loadYahooData = function (code, options) {
             dataType: 'text',
             crossDomain: true,
             success: function (data) {
-                resolve(data);
+                resolve(parseYahooCsv(data));
             },
             error: function (err) {
                 reject(err);

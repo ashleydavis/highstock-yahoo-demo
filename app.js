@@ -17,6 +17,16 @@ $(function() {
             })
             .then(function (data) {
 
+                var volume = Enumerable.from(data)
+                    .reverse()
+                    .select(function (entry) {
+                        return [
+                            entry.Date.getTime(),
+                            entry.Volume,
+                        ];
+                    })
+                    .toArray();
+
                 data = Enumerable
                     .from(data)
                     .reverse()
@@ -40,6 +50,16 @@ $(function() {
     loadYahooData('ABC', {
         })
         .then(function (data) {
+
+            var volume = Enumerable.from(data)
+                .reverse()
+                .select(function (entry) {
+                    return [
+                        entry.Date.getTime(),
+                        entry.Volume,
+                    ];
+                })
+                .toArray();
 
             data = Enumerable
                 .from(data)
@@ -119,16 +139,48 @@ $(function() {
                     minRange: 3600 * 1000 // one hour
                 },
 
-                yAxis: {
-                    floor: 0
-                },
+                yAxis: [
+                    {
+                        labels: {
+                            align: 'right',
+                            x: -3
+                        },
+                        title: {
+                            text: 'OHLC'
+                        },
+                        height: '60%',
+                        lineWidth: 2
+                    }, 
+                    {
+                        labels: {
+                            align: 'right',
+                            x: -3
+                        },
+                        title: {
+                            text: 'Volume'
+                        },
+                        top: '65%',
+                        height: '35%',
+                        offset: 0,
+                        lineWidth: 2
+                    }
+                ],
 
                 series: [
                     {
                         data: data,
                         dataGrouping: {
-                            enabled: false
-                        }
+                            enabled: true
+                        },
+                    },
+                    {
+                        type: 'column',
+                        name: 'Volume',
+                        data: volume,
+                        yAxis: 1,
+                        dataGrouping: {
+                            enabled: true,
+                        },
                     }
                 ]
             });

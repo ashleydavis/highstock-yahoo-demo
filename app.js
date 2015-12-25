@@ -12,8 +12,8 @@ $(function() {
         chart.showLoading('Loading data...');
 
         loadYahooData('ABC', {
-            fromDate: new Date(e.min),
-            toDate: new Date(e.max)
+                fromDate: new Date(e.min),
+                toDate: new Date(e.max),
             })
             .then(function (data) {
 
@@ -37,7 +37,8 @@ $(function() {
                 });
     };
 
-    loadYahooData('ABC')
+    loadYahooData('ABC', {
+        })
         .then(function (data) {
 
             data = Enumerable
@@ -51,7 +52,7 @@ $(function() {
                         entry.High,
                         entry.Low,
                         entry.Close,
-                        ];
+                    ];
                 })
                 .toArray();
 

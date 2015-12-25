@@ -35,6 +35,21 @@ $(function() {
             });
     };
 
+     $("#company").change(function() {
+        var type = this.value;
+        alert(type);
+
+        /*
+            $(chart.series).each(function(){
+                this.update({
+                    type: type 
+                }, false);
+            });
+            chart.redraw();
+        }
+        */
+    });
+
     //
     // Load new data depending on the selected min and max
     //

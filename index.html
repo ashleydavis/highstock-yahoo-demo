@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <!-- saved from url=(0045)http://fiddle.jshell.net/pjaqwajw/show/light/ -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
-  <meta name="robots" content="noindex">
-  <title>Highstock + Data-Forge + Yahoo</title>
+        <meta name="robots" content="noindex">
+        <title>Highstock + Data-Forge + Yahoo</title>
  
-  
-  <script type="text/javascript" src="lib/jquery-1.9.1.js"></script><style type="text/css"></style>
+        <script type="text/javascript" src="lib/jquery-1.9.1.js"></script>
+    </head>
+    <body>
+        <script src="lib/highstock.js"></script>
+        <script src="lib/exporting.js"></script>
+        <script src="bower_components/linqjs/linq.js"></script>
+        <script src="bower_components/chai/chai.js"></script>
+        <script src="bower_components/moment/moment.js"></script>
+        <script src="yahoo.js"></script>
+        <script src="app.js"></script>
 
-</script>
+        <div style="padding: 2px;">
+            <input id="company" value='ABC.AX'></input>
+            <button>Load</button>
+        </div>
 
-</head>
-<body>
-  <script src="lib/highstock.js"></script>
-  <script src="lib/exporting.js"></script>
-  <script src="bower_components/linqjs/linq.js"></script>
-  <script src="bower_components/chai/chai.js"></script>
-  <script src="bower_components/moment/moment.js"></script>
-  <script src="yahoo.js"></script>
-  <script src="app.js"></script>
+        <div id="container" style="height: 400px; min-width: 310px" data-highcharts-chart="0"></div>
 
-<div id="container" style="height: 400px; min-width: 310px" data-highcharts-chart="0"></div>
-
-  
-
-
-
-
-</body></html>
+    </body>
+</html>

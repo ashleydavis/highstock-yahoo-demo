@@ -24,14 +24,6 @@
 
 $(function() {
 
-  loadYahooData('ABC')
-    .then(function (data) {
-      console.log(data);
-    })
-    .catch(function (err) {
-      console.error(err);
-    })
-
   /**
    * Load new data depending on the selected min and max
    */
@@ -39,23 +31,51 @@ $(function() {
 
     var chart = $('#container').highcharts();
 
-    chart.showLoading('Loading data from server...');
-    $.getJSON('https://www.highcharts.com/samples/data/from-sql.php?start=' + Math.round(e.min) +
-      '&end=' + Math.round(e.max) + '&callback=?',
-      function(data) {
+    chart.showLoading('Loading data...');
+
+    loadYahooData('ABC', {
+        fromDate: new Date(e.min),
+        toDate: new Date(e.max)
+      })
+      .then(function (data) {
+
+      data = Enumerable
+          .from(data)
+          .reverse()
+          .select(function (entry) {
+              var time = entry.Date.getTime();
+              return [
+                  time,
+                  entry.Open,
+                  entry.High,
+                  entry.Low,
+                  entry.Close,
+              ];
+          })
+          .toArray();
 
         chart.series[0].setData(data);
         chart.hideLoading();
       });
   }
 
-  // See source code from the JSONP handler at https://github.com/highcharts/highcharts/blob/master/samples/data/from-sql.php
-  $.getJSON('https://www.highcharts.com/samples/data/from-sql.php?callback=?', function(data) {
+  loadYahooData('ABC')
+    .then(function (data) {
 
-    // Add a null value for the end date
-    data = [].concat(data, [
-      [Date.UTC(2011, 9, 14, 19, 59), null, null, null, null]
-    ]);
+      data = Enumerable
+          .from(data)
+          .reverse() //todo: move to load data.
+          .select(function (entry) {
+              var time = entry.Date.getTime();
+              return [
+                  time,
+                  entry.Open,
+                  entry.High,
+                  entry.Low,
+                  entry.Close,
+              ];
+          })
+          .toArray();
 
     // create the chart
     $('#container').highcharts('StockChart', {

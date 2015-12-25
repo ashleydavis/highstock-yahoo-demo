@@ -3,6 +3,39 @@
 $(function() {
 
     //
+    // Load data in format required by highstock.
+    //
+    var loadHighstockData = function (code, options) {
+        return loadYahooData(code, options)
+            .then(function (data) {
+                return {
+                    price: Enumerable.from(data)
+                        .reverse() //todo: move to load data.
+                        .select(function (entry) {
+                            var time = entry.Date.getTime();
+                            return [
+                                time,
+                                entry.Open,
+                                entry.High,
+                                entry.Low,
+                                entry.Close,
+                            ];
+                        })
+                        .toArray(),
+                    volume: Enumerable.from(data)
+                        .reverse()
+                        .select(function (entry) {
+                            return [
+                                entry.Date.getTime(),
+                                entry.Volume,
+                            ];
+                        })
+                        .toArray(),
+                };
+            });
+    };
+
+    //
     // Load new data depending on the selected min and max
     //
     var afterSetExtremes = function(e) {
@@ -11,70 +44,25 @@ $(function() {
 
         chart.showLoading('Loading data...');
 
-        loadYahooData('ABC', {
+        loadHighstockData('ABC', {
                 fromDate: new Date(e.min),
                 toDate: new Date(e.max),
             })
             .then(function (data) {
-
-                var volume = Enumerable.from(data)
-                    .reverse()
-                    .select(function (entry) {
-                        return [
-                            entry.Date.getTime(),
-                            entry.Volume,
-                        ];
-                    })
-                    .toArray();
-
-                data = Enumerable
-                    .from(data)
-                    .reverse()
-                    .select(function (entry) {
-                        var time = entry.Date.getTime();
-                        return [
-                            time,
-                            entry.Open,
-                            entry.High,
-                            entry.Low,
-                            entry.Close,
-                        ];
-                    })
-                    .toArray();
-
-                    chart.series[0].setData(data);
-                    chart.hideLoading();
-                });
+                chart.series[0].setData(data.price);
+                chart.series[1].setData(data.volume);
+                chart.hideLoading();
+            })
+            .catch(function (err) {
+                chart.hideLoading();
+                console.error(err);  
+            });
     };
 
-    loadYahooData('ABC', {
-        })
+    loadHighstockData('ABC', {})
         .then(function (data) {
-
-            var volume = Enumerable.from(data)
-                .reverse()
-                .select(function (entry) {
-                    return [
-                        entry.Date.getTime(),
-                        entry.Volume,
-                    ];
-                })
-                .toArray();
-
-            data = Enumerable
-                .from(data)
-                .reverse() //todo: move to load data.
-                .select(function (entry) {
-                    var time = entry.Date.getTime();
-                    return [
-                        time,
-                        entry.Open,
-                        entry.High,
-                        entry.Low,
-                        entry.Close,
-                    ];
-                })
-                .toArray();
+            var price = data.price;
+            var volume = data.volume;
 
             var groupingUnits = [
                 [
@@ -92,9 +80,14 @@ $(function() {
 
                 navigator: {
                     adaptToUpdatedData: false,
-                    series: {
-                        data: data
-                    }
+                    series: [
+                        {
+                            data: price
+                        },
+                        {
+                            data: volume
+                        },
+                    ]
                 },
 
                 scrollbar: {
@@ -143,7 +136,7 @@ $(function() {
                     events: {
                         afterSetExtremes: afterSetExtremes
                     },
-                    minRange: 3600 * 1000 // one hour
+                    minRange: 3600 * 1000 * 24 * 5 // 1 week
                 },
 
                 yAxis: [
@@ -177,7 +170,7 @@ $(function() {
                     {
                         type: 'candlestick',
                         name: 'Price',
-                        data: data,
+                        data: price,
                         dataGrouping: {
                             units: groupingUnits
                         }
@@ -193,5 +186,10 @@ $(function() {
                     }
                 ]
             });
+        })
+        .catch(function (err) {
+            chart.hideLoading();
+            console.error(err);  
         });
+
 });

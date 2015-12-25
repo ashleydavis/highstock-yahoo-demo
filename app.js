@@ -131,7 +131,7 @@ $(function() {
                     },
 
                     title: {
-                        text: 'ABC price history'
+                        text: code.toUpperCase() + ' price history'
                     },
 
                     subtitle: {

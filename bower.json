@@ -1,0 +1,19 @@
+{
+  "name": "highstock-yahoo-demo",
+  "homepage": "https://github.com/codecapers/highstock-yahoo-demo",
+  "authors": [
+    "Ashley Davis <ashley@codecapers.com.au>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

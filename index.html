@@ -23,21 +23,14 @@
 <script type="text/javascript">//<![CDATA[
 
 $(function() {
-  var code = 'ABC';
-  var yahooUrl = 'http://ichart.yahoo.com/table.csv?s=' + code + '.AX';
-  var proxyUrl = 'http://cors.io/?u=' + encodeURIComponent(yahooUrl);
-  $.ajax({
-      type: 'GET',
-      url: proxyUrl, 
-      dataType: 'text',
-      crossDomain: true,
-      success: function (data) {
-        console.log(data);
-      },
-      error: function (textStatus, err) {
-        console.error(arguments);
-      },
-  });
+
+  loadYahooData('ABC')
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch(function (err) {
+      console.error(err);
+    })
 
   /**
    * Load new data depending on the selected min and max
@@ -143,7 +136,8 @@ $(function() {
 </head>
 <body>
   <script src="lib/highstock.js"></script>
-<script src="lib/exporting.js"></script>
+  <script src="lib/exporting.js"></script>
+  <script src="yahoo.js"></script>
 
 <div id="container" style="height: 400px; min-width: 310px" data-highcharts-chart="0"></div>
 

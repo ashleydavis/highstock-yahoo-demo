@@ -88,6 +88,14 @@ $(function() {
     };
 
     //
+    // Resize the chart to fit the page.
+    //
+    var resizeChart = function () {
+        var chart = $('#container').highcharts();
+        chart.setSize($(window).width(), $(window).height()-50);
+    };
+
+    //
     // Load the chart.
     //
     var loadChart = function () {
@@ -222,13 +230,20 @@ $(function() {
                         }
                     ]
                 });
+
+                resizeChart();
             })
             .catch(function (err) {
-                chart.hideLoading();
                 console.error(err);  
             });
     };
 
     loadChart();
 
+    //
+    // Resize chart when window size changes.
+    //
+    $(window).resize(function() {
+        resizeChart();
+    });
 });

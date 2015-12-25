@@ -1,2 +1,3 @@
 # highstock-yahoo-demo
-A demo of Highstock using data loaded from Yahoo
+
+A demo of Highstock using Data-Forge with data loaded from Yahoo.

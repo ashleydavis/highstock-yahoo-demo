@@ -88,15 +88,18 @@ $(function() {
                             type: 'hour',
                             count: 1,
                             text: '1h'
-                            }, {
+                        }, 
+                        {
                             type: 'day',
                             count: 1,
                             text: '1d'
-                        }, {
+                        }, 
+                        {
                             type: 'month',
                             count: 1,
                             text: '1m'
-                        }, {
+                        }, 
+                        {
                             type: 'year',
                             count: 1,
                             text: '1y'

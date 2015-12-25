@@ -76,12 +76,19 @@ $(function() {
                 })
                 .toArray();
 
+            var groupingUnits = [
+                [
+                    'week',                         // unit name
+                    [1]                             // allowed multiples
+                ], 
+                [
+                    'month',
+                    [1, 2, 3, 4, 6]
+                ]
+            ];
+            
             // create the chart
             $('#container').highcharts('StockChart', {
-                chart: {
-                    type: 'candlestick',
-                    zoomType: 'x'
-                },
 
                 navigator: {
                     adaptToUpdatedData: false,
@@ -168,10 +175,12 @@ $(function() {
 
                 series: [
                     {
+                        type: 'candlestick',
+                        name: 'Price',
                         data: data,
                         dataGrouping: {
-                            enabled: true
-                        },
+                            units: groupingUnits
+                        }
                     },
                     {
                         type: 'column',
@@ -179,8 +188,8 @@ $(function() {
                         data: volume,
                         yAxis: 1,
                         dataGrouping: {
-                            enabled: true,
-                        },
+                            units: groupingUnits
+                        }
                     }
                 ]
             });

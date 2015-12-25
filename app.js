@@ -146,7 +146,7 @@ $(function() {
                             x: -3
                         },
                         title: {
-                            text: 'OHLC'
+                            text: 'Price'
                         },
                         height: '60%',
                         lineWidth: 2

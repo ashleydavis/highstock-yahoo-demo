@@ -7,7 +7,7 @@ var formatYahooUrl = function (code, options) {
 
     options = options || {};
 
-    var url = 'http://ichart.yahoo.com/table.csv?s=' + code.toUpperCase() + '.AX';
+    var url = 'http://ichart.yahoo.com/table.csv?s=' + code.toUpperCase();
 
     if (options.fromDate) {                
         url += '&a=' + options.fromDate.getMonth(); // Month. Yahoo expects 0-based month.

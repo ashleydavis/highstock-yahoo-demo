@@ -52,13 +52,9 @@ var formatYahooUrl = function (code, options) {
 // Parse CSV data from Yahoo API.
 //
 var parseYahooCsv = function (csv) {
-    var lines = Enumerable.from(
-            csv.split('\n')
-        )
+    var lines = Enumerable.from(csv.split('\n'))
         .select(function (row) {
-            return Enumerable.from(
-                    row.split(',')
-                )
+            return Enumerable.from(row.split(','))
                 .select(function (col) {
                     return col.trim();
                 })
@@ -74,31 +70,35 @@ var parseYahooCsv = function (csv) {
             else {
                 return false;
             }
-        });
-
-    var header = lines.take(1);
-
-    var parsed = lines
-        .skip(1) // Cut out header.
-        .select(function (cols) {
-            chai.assert(cols.length === 7);
-            return [
-                moment(cols[0]).toDate(),
-                parseFloat(cols[1]),
-                parseFloat(cols[2]),
-                parseFloat(cols[3]),
-                parseFloat(cols[4]),
-                parseInt(cols[5]),
-                parseFloat(cols[6]),
-            ];
         })
         .toArray();
 
-    var rows = header
-        .concat(parsed)
-        .toArray();
+    var header = lines[0];
 
-    return rows;
+    return Enumerable.from(lines)
+        .skip(1) // Cut out header.
+        .select(function (cols) {
+            return Enumerable.from(header)
+                .select(function (columnName, index) {
+                    var value = cols[index];
+                    if (index === 0) {
+                        value = moment(value).toDate(); // Treat first column as date.
+                    }
+                    else {
+                        value = parseFloat(value); // Every other column is a number.
+                    }
+                    return [columnName, value];
+                })
+                .toObject(
+                    function (pair) {
+                        return pair[0];
+                    },
+                    function (pair) {
+                        return pair[1];
+                    }
+                );
+        })
+        .toArray();
 };
 
 // 

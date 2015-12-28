@@ -3,6 +3,17 @@
 $(function() {
 
     //
+    // Period for simple moving average.
+    //
+    var smaPeriod = 30;
+
+    //
+    // Data loaded for the current graph.
+    //
+    var curDataFrame = null;
+
+
+    //
     // Load data in format required by highstock.
     //
     var loadHighstockData = function (code, options) {
@@ -14,6 +25,7 @@ $(function() {
                     .toArray();
 
                 var df = new dataForge.DataFrame({ rows: reversed });
+                curDataFrame = df;
 
                 var origGetColumnsSubset = df.getColumnsSubset;
 
@@ -77,7 +89,6 @@ $(function() {
                     return newDf;
                 };
 
-
                 return df;
             });
     };
@@ -108,6 +119,22 @@ $(function() {
         reloadChart();
     });
 
+    $('#SMA-period').change(function () {
+        smaPeriod = $('#SMA-period').val();
+        var chart = $('#container').highcharts();
+        if (chart && curDataFrame) {
+            computeSMA(chart, curDataFrame);
+        }
+    });
+
+    $('#recalcSMA').click(function () {
+        smaPeriod = $('#SMA-period').val();
+        var chart = $('#container').highcharts();
+        if (chart && curDataFrame) {
+            computeSMA(chart, curDataFrame);
+        }
+    });
+
     //
     // Load new data depending on the selected date range.
     //
@@ -126,14 +153,21 @@ $(function() {
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
 
                 chart.series[0].setData(price);
-                chart.series[1].setData(dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(30));
                 chart.series[2].setData(volume);
+                computeSMA(chart, dataFrame);
                 chart.hideLoading();
             })
             .catch(function (err) {
                 chart.hideLoading();
                 console.error(err);  
             });
+    };
+
+    //
+    // Compute simple moving average of the price.
+    //
+    var computeSMA = function (chart, dataFrame) {
+        chart.series[1].setData(dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(smaPeriod));
     };
 
     //
@@ -271,7 +305,7 @@ $(function() {
                         {
                             name: 'SMA',
                             color: 'red',
-                            data: dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(30),
+                            data: dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(smaPeriod),
                             tooltip: {
                                 valueDecimals: 5
                             }

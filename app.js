@@ -47,12 +47,36 @@ $(function() {
                         .toArray();
                 };
 
+                var toHighstockSMA = function (period) {
+                    var self = this;
+                    var inputData = self.toValues();
+                    var output = [];
+                    for (var i = inputData.length-1; i > period; --i) {
+                        
+                        var sample = inputData[i][1];
+                        var date = inputData[i][0].getTime();
+
+                        for (var j = 1; j < period; ++j) {
+                            sample += inputData[i-j][1];
+                        }
+
+                        sample /= period;
+
+                        output.push([date, sample]);
+                    }
+
+                    return output.reverse();
+                };    
+
+
                 df.getColumnsSubset = function (columnNames) { //todo: shouldn't have to replace this.
                     var newDf = origGetColumnsSubset.call(this, columnNames);
                     newDf.toHighstockOHLC = toHighstockOHLC;
                     newDf.toHighstock = toHighstock;
+                    newDf.toHighstockSMA = toHighstockSMA;  
                     return newDf;
                 };
+
 
                 return df;
             });
@@ -102,7 +126,8 @@ $(function() {
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
 
                 chart.series[0].setData(price);
-                chart.series[1].setData(volume);
+                chart.series[1].setData(dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(30));
+                chart.series[2].setData(volume);
                 chart.hideLoading();
             })
             .catch(function (err) {
@@ -241,6 +266,14 @@ $(function() {
                             data: price,
                             dataGrouping: {
                                 units: groupingUnits
+                            }
+                        },
+                        {
+                            name: 'SMA',
+                            color: 'red',
+                            data: dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(30),
+                            tooltip: {
+                                valueDecimals: 5
                             }
                         },
                         {

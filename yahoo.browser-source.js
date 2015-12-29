@@ -1,2 +1,4 @@
 
-require('./yahoo')(dataForge);
+require('./yahoo')(dataForge, {
+		proxyUrl: 'http://cors.io/?u='
+	});

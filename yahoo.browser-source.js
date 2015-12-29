@@ -1,0 +1,2 @@
+
+require('./yahoo')(dataForge);

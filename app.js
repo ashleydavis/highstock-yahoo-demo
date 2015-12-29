@@ -1,4 +1,4 @@
-    'use strict';
+'use strict';
 
 $(function() {
 
@@ -17,7 +17,7 @@ $(function() {
     // Load data in format required by highstock.
     //
     var loadHighstockData = function (code, options) {
-        return loadYahooData(code, options)
+        return dataForge.fromYahoo(code, options)
             .then(function (dataFrame) {
                 //todo: data-forge needs a reverse fn.
                 var reversed = Enumerable.from(dataFrame.toObjects())

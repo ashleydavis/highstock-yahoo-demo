@@ -2,6 +2,8 @@
 
 module.exports = function (dataForge, globalOptions) {
 	
+	var request = require('request-promise');
+	
 	//
 	// Create the URL for pulling data from Yahoo.
 	//
@@ -52,7 +54,7 @@ module.exports = function (dataForge, globalOptions) {
 	//
 	// Parse CSV data from Yahoo API.
 	//
-	var parseYahooCsv = function (dataForge, csv) {
+	var parseYahooCsv = function (csv) {
 		var lines = Enumerable.from(csv.split('\n'))
 			.select(function (row) {
 				return Enumerable.from(row.split(','))
@@ -98,31 +100,24 @@ module.exports = function (dataForge, globalOptions) {
 	// 
 	// Load CSV data from Yahoo.
 	//
-	var loadYahooData = function (dataForge, code, options) {
+	var loadYahooData = function (code, options) {
 
-		return new Promise(function (resolve, reject) {
-
-			var url = formatYahooUrl(code, options);
-			if (globalOptions.proxyUrl) {
-				url = globalOptions.proxyUrl + encodeURIComponent(url);	
-			}
-			
-			$.ajax({
+		var url = formatYahooUrl(code, options);
+		if (globalOptions.proxyUrl) {
+			url = globalOptions.proxyUrl + encodeURIComponent(url);	
+		}
+		
+		return request({
 				type: 'GET',
-				url: url, 
+				uri: url, 
 				dataType: 'text',
-				crossDomain: true,
-				success: function (data) {
-					resolve(parseYahooCsv(dataForge, data));
-				},
-				error: function (err) {
-					reject(err);
-				},
+			})
+			.then(function (data) {
+				return parseYahooCsv(data);
 			});
-		});
 	};
 
 	dataForge.fromYahoo = function (code, options) {
-		return loadYahooData(dataForge, code, options);
+		return loadYahooData(code, options);
 	};
 };

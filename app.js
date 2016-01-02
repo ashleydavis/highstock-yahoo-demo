@@ -302,6 +302,7 @@ $(function() {
                             }
                         },
                         {
+                            type: 'line',
                             name: 'SMA',
                             color: 'red',
                             data: dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(smaPeriod),

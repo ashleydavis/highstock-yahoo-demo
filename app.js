@@ -201,10 +201,9 @@ $(function() {
                         [1, 2, 3, 4, 6]
                     ]
                 ];
-                
-                // create the chart
-                $('#container').highcharts('StockChart', {
 
+                var chartOptions =
+                {
                     navigator: {
                         adaptToUpdatedData: false,
                         series: [
@@ -320,7 +319,10 @@ $(function() {
                             }
                         }
                     ]
-                });
+                };
+                
+                // create the chart
+                $('#container').highcharts('StockChart', chartOptions);
 
                 resizeChart();
             })

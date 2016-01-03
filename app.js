@@ -12,6 +12,11 @@ $(function() {
     //
     var curDataFrame = null;
 
+    //
+    // Default company code.
+    //
+    var defaultCompanyCode = 'ABC.AX';
+
 
     //
     // Load data in format required by highstock.
@@ -144,7 +149,7 @@ $(function() {
 
         chart.showLoading('Loading data...');
 
-        loadHighstockData('ABC', {
+        loadHighstockData(defaultCompanyCode, {
                 fromDate: new Date(e.min),
                 toDate: new Date(e.max),
             })

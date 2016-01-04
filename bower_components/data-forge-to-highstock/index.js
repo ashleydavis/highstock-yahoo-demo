@@ -17,9 +17,9 @@ module.exports = function (dataForge) {
             .select(function (entry) {
             	assert.instanceOf(entry[0], Date, "Expected column 0 to contain dates!");
             	assert.isNumber(entry[1], "Expected column 1 to contain numbers!");
-            	assert.isNumber(entry[2], "Expected column 1 to contain numbers!");
-            	assert.isNumber(entry[3], "Expected column 1 to contain numbers!");
-            	assert.isNumber(entry[4], "Expected column 1 to contain numbers!");
+            	assert.isNumber(entry[2], "Expected column 2 to contain numbers!");
+            	assert.isNumber(entry[3], "Expected column 3 to contain numbers!");
+            	assert.isNumber(entry[4], "Expected column 4 to contain numbers!");
 
                 return [
                     entry[0].getTime(),
@@ -41,6 +41,10 @@ module.exports = function (dataForge) {
 		assert(self.getColumnNames().length >= 2); // Expect columns for date + value.
 
         return Enumerable.from(self.toValues())
+            .where(function (entry) {
+                // Ignore undefined values.
+                return entry[1] !== undefined;
+            })
             .select(function (entry) {
             	assert.instanceOf(entry[0], Date, "Expected column 0 to contain dates!");
             	assert.isNumber(entry[1], "Expected column 1 to contain numbers!");

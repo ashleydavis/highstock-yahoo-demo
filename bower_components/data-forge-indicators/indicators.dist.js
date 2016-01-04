@@ -1774,61 +1774,44 @@ require('./index')(dataForge);
 module.exports = function (dataForge) {
 
 	var assert = require('chai').assert;
-	var Enumerable = require('linq');
+    var Enumerable = require('linq');
 
-	/**
-	 * Convert the data-frame to Highstock date+OHLC format.
+	/*
+	 * Generate a simple moving average from the column.
+	 *
+	 * @param {int} period - The time period of the moving average.
 	 */
-	dataForge.BaseDataFrame.prototype.toHighstockOHLC = function () {
+    dataForge.BaseColumn.prototype.sma = function (period) {
+
+    	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
 
         var self = this;
-		assert(self.getColumnNames().length >= 5); // Expect columns for date + OHLC.
 
-        return Enumerable.from(self.toValues())
-            .select(function (entry) {
-            	assert.instanceOf(entry[0], Date, "Expected column 0 to contain dates!");
-            	assert.isNumber(entry[1], "Expected column 1 to contain numbers!");
-            	assert.isNumber(entry[2], "Expected column 2 to contain numbers!");
-            	assert.isNumber(entry[3], "Expected column 3 to contain numbers!");
-            	assert.isNumber(entry[4], "Expected column 4 to contain numbers!");
+        var indices = self.getIndex().toValues();
+        var values = self.toValues();
+        var outputIndices = [];
+        var outputValues = [];
+        for (var i = values.length-1; i > period; --i) {
+            
+            var sample = values[i];
+            var index = indices[i];
 
-                return [
-                    entry[0].getTime(),
-                    entry[1],
-                    entry[2],
-                    entry[3],
-                    entry[4],
-                ];
-            })
-            .toArray();
+            for (var j = 1; j < period; ++j) {
+                sample += values[i-j];
+            }
+
+            sample /= period;
+
+            outputIndices.push(index);
+            outputValues.push(sample);            
+        }
+
+        return new dataForge.Column(
+        	"SMA" + period,
+        	outputValues.reverse(),
+            new dataForge.Index(self.getIndex().getName(), outputIndices.reverse())
+        );
     };
-
-    /**
-	 * Convert the data-frame to Highstock date+value format.
-     */
-    dataForge.BaseDataFrame.prototype.toHighstock = function () {
-
-        var self = this;
-		assert(self.getColumnNames().length >= 2); // Expect columns for date + value.
-
-        return Enumerable.from(self.toValues())
-            .where(function (entry) {
-                // Ignore undefined values.
-                return entry[1] !== undefined;
-            })
-            .select(function (entry) {
-            	assert.instanceOf(entry[0], Date, "Expected column 0 to contain dates!");
-            	assert.isNumber(entry[1], "Expected column 1 to contain numbers!");
-
-                return [
-                    entry[0].getTime(),
-                    entry[1],
-                ];
-            })
-            .toArray();
-    };
-
-
 };
 },{"chai":7,"linq":43}],7:[function(require,module,exports){
 module.exports = require('./lib/chai');

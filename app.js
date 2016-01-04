@@ -29,39 +29,7 @@ $(function() {
                     .reverse()
                     .toArray();
 
-                var df = new dataForge.DataFrame({ rows: reversed });
-                curDataFrame = df;
-
-                var origGetColumnsSubset = df.getColumnsSubset;
-
-                var toHighstockSMA = function (period) {
-                    var self = this;
-                    var inputData = self.toValues();
-                    var output = [];
-                    for (var i = inputData.length-1; i > period; --i) {
-                        
-                        var sample = inputData[i][1];
-                        var date = inputData[i][0].getTime();
-
-                        for (var j = 1; j < period; ++j) {
-                            sample += inputData[i-j][1];
-                        }
-
-                        sample /= period;
-
-                        output.push([date, sample]);
-                    }
-
-                    return output.reverse();
-                };    
-
-                df.getColumnsSubset = function (columnNames) { //todo: shouldn't have to replace this.
-                    var newDf = origGetColumnsSubset.call(this, columnNames);
-                    newDf.toHighstockSMA = toHighstockSMA;  
-                    return newDf;
-                };
-
-                return df;
+                return new dataForge.DataFrame({ rows: reversed });
             });
     };
 
@@ -123,9 +91,18 @@ $(function() {
             .then(function (dataFrame) {
                 var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
+                var sma = dataFrame.setColumn("SMA", 
+                        dataFrame
+                            .getColumn("Close")
+                            .sma(smaPeriod)
+                    )
+                    .getColumnsSubset(["Date", "SMA"])
+                    .toHighstock();
 
                 chart.series[0].setData(price);
+                chart.series[1].setData(sma);
                 chart.series[2].setData(volume);
+
                 computeSMA(chart, dataFrame);
                 chart.hideLoading();
             })
@@ -162,6 +139,13 @@ $(function() {
             .then(function (dataFrame) {
                 var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
+                var sma = dataFrame.setColumn("SMA", 
+                        dataFrame
+                            .getColumn("Close")
+                            .sma(smaPeriod)
+                    )
+                    .getColumnsSubset(["Date", "SMA"])
+                    .toHighstock();
 
                 var groupingUnits = [
                     [
@@ -277,7 +261,7 @@ $(function() {
                             type: 'line',
                             name: 'SMA',
                             color: 'red',
-                            data: dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(smaPeriod),
+                            data: sma,
                             tooltip: {
                                 valueDecimals: 5
                             }

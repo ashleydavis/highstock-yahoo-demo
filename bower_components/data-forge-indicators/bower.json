@@ -1,0 +1,29 @@
+{
+  "name": "data-forge-indicators",
+  "description": "Data-Forge plugin for a variety of financial indicators.",
+  "main": "indicators.dist.js",
+  "authors": [
+    "ashley@codecapers.com.au"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "data-forge",
+    "data",
+    "analysis",
+    "transformation",
+    "finance",
+    "financial",
+    "indicators",
+    "technical",
+    "analysis"
+  ],
+  "homepage": "https://github.com/data-forge/data-forge-indicators",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1768,12 +1768,10 @@ module.exports = Array.isArray || function (arr) {
 };
 
 },{}],6:[function(require,module,exports){
+'use strict';
 
-window.dataForge = require('../../index');
-window.moment = require('moment');
-window.E = require('linq');
-
-},{"../../index":7,"linq":45,"moment":46}],7:[function(require,module,exports){
+window.dataForge = require('../data-forge-js/index');
+},{"../data-forge-js/index":7}],7:[function(require,module,exports){
 'use strict';
 
 var assert = require('chai').assert;
@@ -1803,10 +1801,25 @@ var dataForge = {
 	
 	DataFrame: DataFrame,
 	LazyDataFrame: require('./src/lazydataframe'),
+	BaseDataFrame: require('./src/basedataframe'),
 	Column: require('./src/column'),
 	LazyColumn: require('./src/lazycolumn'),
+	BaseColum: require('./src/basecolumn'),
 	Index: require('./src/index'),
 	LazyIndex: require('./src/lazyindex'),
+	BaseIndex: require('./src/baseindex'),
+
+	/**
+	 * Install a plugin in the dataForge namespace.
+	 */
+	use: function (plugin) {
+
+		assert.isFunction(plugin, "Expected 'plugin' parameter to 'use' to be a function.");
+
+		var self = this;
+		plugin(self);
+	},
+
 
 	/**
 	 * Deserialize a data frame from a JSON text string.
@@ -1969,7 +1982,7 @@ var dataForge = {
 };
 
 module.exports = dataForge;
-},{"./src/column":51,"./src/dataframe":52,"./src/enumerators/array":53,"./src/index":54,"./src/lazycolumn":56,"./src/lazydataframe":57,"./src/lazyindex":58,"./src/utils":59,"chai":8,"linq":45,"sugar":47}],8:[function(require,module,exports){
+},{"./src/basecolumn":48,"./src/basedataframe":49,"./src/baseindex":50,"./src/column":51,"./src/dataframe":52,"./src/enumerators/array":53,"./src/index":54,"./src/lazycolumn":56,"./src/lazydataframe":57,"./src/lazyindex":58,"./src/utils":59,"chai":8,"linq":45,"sugar":47}],8:[function(require,module,exports){
 module.exports = require('./lib/chai');
 
 },{"./lib/chai":9}],9:[function(require,module,exports){
@@ -24951,7 +24964,7 @@ BaseDataFrame.prototype.getColumnsSubset = function (columnNames) {
 
 	var self = this;
 	
-	assert.isArray(columnNames, "Expected 'columnName' parameter to 'subset' to be an array.");	
+	assert.isArray(columnNames, "Expected 'columnName' parameter to 'getColumnsSubset' to be an array.");	
 	
 	return new LazyDataFrame(
 		function () {

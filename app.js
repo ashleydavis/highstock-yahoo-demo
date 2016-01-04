@@ -34,36 +34,6 @@ $(function() {
 
                 var origGetColumnsSubset = df.getColumnsSubset;
 
-                var toHighstockOHLC = function () { //todo: need to be on BaseDataFrame
-                    //todo: assert 5 columns.
-                    var self = this;
-                    return Enumerable.from(self.toValues())
-                        .select(function (entry) {
-                            var time = entry[0].getTime();
-                            return [
-                                time,
-                                entry[1],
-                                entry[2],
-                                entry[3],
-                                entry[4],
-                            ];
-                        })
-                        .toArray();
-                };
-
-                var toHighstock = function () { //todo: need to be on BaseDataFrame
-                    //todo: assert 2 columns.
-                    var self = this;
-                    return Enumerable.from(self.toValues())
-                        .select(function (entry) {
-                            return [
-                                entry[0].getTime(),
-                                entry[1],
-                            ];
-                        })
-                        .toArray();
-                };
-
                 var toHighstockSMA = function (period) {
                     var self = this;
                     var inputData = self.toValues();
@@ -85,11 +55,8 @@ $(function() {
                     return output.reverse();
                 };    
 
-
                 df.getColumnsSubset = function (columnNames) { //todo: shouldn't have to replace this.
                     var newDf = origGetColumnsSubset.call(this, columnNames);
-                    newDf.toHighstockOHLC = toHighstockOHLC;
-                    newDf.toHighstock = toHighstock;
                     newDf.toHighstockSMA = toHighstockSMA;  
                     return newDf;
                 };

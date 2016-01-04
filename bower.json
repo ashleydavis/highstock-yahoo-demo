@@ -21,6 +21,7 @@
     "chai": "~3.4.2",
     "moment": "~2.10.6",
     "data-forge": "~0.0.6",
-    "data-forge-from-yahoo": "~0.0.4"
+    "data-forge-from-yahoo": "~0.0.4",
+    "data-forge-to-highstock": "~0.0.3"
   }
 }

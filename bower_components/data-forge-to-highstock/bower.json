@@ -1,0 +1,27 @@
+{
+  "name": "data-forge-to-highstock",
+  "description": "Data-Forge plugin for transforming data to the Highstock format.",
+  "main": "to-highstock.dist.js",
+  "authors": [
+    "ashley@codecapers.com.au"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "data-forge",
+    "data",
+    "analysis",
+    "transformation",
+    "highstock",
+    "highcharts",
+    "financial"
+  ],
+  "homepage": "https://github.com/data-forge/data-forge-to-highstock",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

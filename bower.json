@@ -20,6 +20,7 @@
     "linqjs": "~3.0.5",
     "chai": "~3.4.2",
     "moment": "~2.10.6",
-    "data-forge": "~0.0.6"
+    "data-forge": "~0.0.6",
+    "data-forge-from-yahoo": "~0.0.4"
   }
 }

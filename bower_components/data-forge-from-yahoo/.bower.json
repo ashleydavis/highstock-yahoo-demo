@@ -1,0 +1,37 @@
+{
+  "name": "data-forge-from-yahoo",
+  "description": "Data-Forge plugin for pulling data from the Yahoo financial API.",
+  "main": "from-yahoo.dist.js",
+  "authors": [
+    "ashley@codecapers.com.au"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "data",
+    "analysis",
+    "transformation",
+    "data-forge",
+    "yahoo",
+    "financial"
+  ],
+  "homepage": "https://github.com/data-forge/data-forge-from-yahoo",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "0.0.4",
+  "_release": "0.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.4",
+    "commit": "9ec8d7e96c1fdfce8a810f87df04e0e6ea5cd085"
+  },
+  "_source": "git://github.com/data-forge/data-forge-from-yahoo.git",
+  "_target": "~0.0.4",
+  "_originalSource": "data-forge-from-yahoo",
+  "_direct": true
+}

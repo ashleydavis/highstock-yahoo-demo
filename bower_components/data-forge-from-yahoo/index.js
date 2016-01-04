@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = function (dataForge, globalOptions) {
+
+	var Enumerable = require('linq');
+	var moment = require('moment');
+
+	globalOptions = globalOptions || {};
 	
 	var request = require('request-promise');
 	

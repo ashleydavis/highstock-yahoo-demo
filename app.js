@@ -17,6 +17,10 @@ $(function() {
     //
     var defaultCompanyCode = 'ABC.AX';
 
+    //
+    // Used to suppress chart reload while resizing the chart.
+    //
+    var resizingChart = false;
 
     //
     // Load data in format required by highstock.
@@ -80,27 +84,36 @@ $(function() {
     //
     var afterSetExtremes = function(e) {
 
+        if (resizingChart) {
+            // Don't need to reload data when resizing the chart.
+            return; 
+        }
+
         var chart = $('#container').highcharts();
 
         chart.showLoading('Loading data...');
 
+        var fromDate = new Date(e.min);
+        var toDate = new Date(e.max);
+        var elapsedMonths = moment(toDate).diff(fromDate, 'months');
+        var interval = 'daily';
+        if (elapsedMonths > 50) {
+            interval = 'monthly';
+        }
+        else if (elapsedMonths > 18) {
+            interval = 'weekly';
+        }
+
         loadHighstockData(defaultCompanyCode, {
-                fromDate: new Date(e.min),
-                toDate: new Date(e.max),
+                fromDate: fromDate,
+                toDate: toDate,
+                interval: interval,
             })
             .then(function (dataFrame) {
                 var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
-                var sma = dataFrame.setColumn("SMA", 
-                        dataFrame
-                            .getColumn("Close")
-                            .sma(smaPeriod)
-                    )
-                    .getColumnsSubset(["Date", "SMA"])
-                    .toHighstock();
 
                 chart.series[0].setData(price);
-                chart.series[1].setData(sma);
                 chart.series[2].setData(volume);
 
                 computeSMA(chart, dataFrame);
@@ -116,15 +129,28 @@ $(function() {
     // Compute simple moving average of the price.
     //
     var computeSMA = function (chart, dataFrame) {
-        chart.series[1].setData(dataFrame.getColumnsSubset(["Date", "Close"]).toHighstockSMA(smaPeriod));
+        var sma = dataFrame.setColumn("SMA", 
+                dataFrame
+                    .getColumn("Close")
+                    .sma(smaPeriod)
+            )
+            .getColumnsSubset(["Date", "SMA"])
+            .toHighstock();
+        chart.series[1].setData(sma);
     };
 
     //
     // Resize the chart to fit the page.
     //
     var resizeChart = function () {
-        var chart = $('#container').highcharts();
-        chart.setSize($(window).width(), $(window).height()-50);
+        try {
+            resizingChart = true;
+            var chart = $('#container').highcharts();
+            chart.setSize($(window).width(), $(window).height()-50);            
+        }
+        finally {
+            resizingChart = false;
+        }
     };
 
     //
@@ -135,7 +161,9 @@ $(function() {
         var code = $("#company").val();
         console.log('Loading ' + code);
 
-        loadHighstockData(code, {})
+        loadHighstockData(code, {
+                interval: 'monthly'
+            })
             .then(function (dataFrame) {
                 var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
@@ -148,6 +176,10 @@ $(function() {
                     .toHighstock();
 
                 var groupingUnits = [
+                    [
+                        'day',
+                        [1]
+                    ],
                     [
                         'week',                         // unit name
                         [1]                             // allowed multiples
@@ -165,9 +197,6 @@ $(function() {
                         series: [
                             {
                                 data: price
-                            },
-                            {
-                                data: volume
                             },
                         ]
                     },
@@ -262,6 +291,9 @@ $(function() {
                             name: 'SMA',
                             color: 'red',
                             data: sma,
+                            dataGrouping: {
+                                units: groupingUnits
+                            },
                             tooltip: {
                                 valueDecimals: 5
                             }

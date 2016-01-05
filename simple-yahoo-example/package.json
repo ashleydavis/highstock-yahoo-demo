@@ -1,0 +1,15 @@
+{
+  "name": "simple-yahoo-example",
+  "version": "0.0.0",
+  "description": "",
+  "main": "simple-yahoo-example.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "data-forge": "0.0.10",
+    "data-forge-from-yahoo": "0.0.4"
+  }
+}

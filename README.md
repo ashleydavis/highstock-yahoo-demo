@@ -200,6 +200,20 @@ Or
 	npm install --save data-forge-to-highstock
 	npm install --save data-forge-indicators
 
+To use Data-Forge in the browser you simply include the script files for Data-Forge and plugins in the HTML file:
+
+	<script src="bower_components/data-forge/data-forge.js"></script>
+	<script src="bower_components/data-forge-from-yahoo/from-yahoo.dist.js"></script>
+	<script src="bower_components/data-forge-to-highstock/to-highstock.dist.js"></script>
+	<script src="bower_components/data-forge-indicators/indicators.dist.js"></script>
+
+For Node.js require in the main module then *use* the plugins:
+
+	var dataForge = require('data-forge');
+	dataForge.use(require('data-forge-from-yahoo'));
+	dataForge.use(require('data-forge-to-highstock'));
+	dataForge.use(require('data-forge-indicators')); 
+
 Like a [swiss-army knife](https://en.wikipedia.org/wiki/Swiss_Army_knife), Data-Forge does many things, but what does data-forge do for us in this example?
 
 Let's see...

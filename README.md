@@ -25,7 +25,7 @@ This post is available on [Code Project](http://www.codeproject.com/Articles/106
 
 ## Introduction
 
-This post accompanies and explains my demonstration of [Highstock charts](http://www.highcharts.com/products/highstock) using data from Yahoo's financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of [JavasScript](https://en.wikipedia.org/wiki/JavaScript) and [jQuery](https://en.wikipedia.org/wiki/JQuery). Most of the useful information you'll find by studying the accompanying example code, in this post I'll give a brief overview of the technology and how it fits together.
+This post accompanies and explains my demonstration of [Highstock charts](http://www.highcharts.com/products/highstock) using data from Yahoo's financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of [JavaScript](https://en.wikipedia.org/wiki/JavaScript) and [jQuery](https://en.wikipedia.org/wiki/JQuery). Most of the useful information you'll find by studying the accompanying example code, in this post I'll give a brief overview of the technology and how it fits together.
 
 This post introduces the open-source [Data-Forge](https://github.com/Real-Serious-Games/data-forge-js) library which is a prototype and a work in progress. I am the main developer of Data-Forge and I want to bring attention to it and elicit feedback. 
 

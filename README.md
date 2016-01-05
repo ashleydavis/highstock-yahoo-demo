@@ -150,11 +150,11 @@ For example to retrieve Microsoft data for the last few months of 2015: [http://
 Of course, the example code doesn't directly hit the Yahoo API. [*Data-Forge*](#data-forge) has a convenient plugin *[data-forge-from-yahoo](https://github.com/data-forge/data-forge-from-yahoo)*  to pull data from Yahoo. The `fromYahoo` function returns a promise that resolves to a [data frame](https://github.com/real-serious-games/data-forge-js#data-frame) that contains the data returned from Yahoo, which looks like this: 
 
 	var dataForge = require('data-forge');
-	dataForge.use(require('data-forge-from-yahoo');
+	dataForge.use(require('data-forge-from-yahoo'));
 
 	dataForge.fromYahoo('MSFT')
 		.then(function (dataFrame) {
-			console.log(dataFrame.toString());
+			console.log(dataFrame.take(5).toString());
 		})
 		.catch(function (err) {
 			// ... error handling ...
@@ -162,7 +162,15 @@ Of course, the example code doesn't directly hit the Yahoo API. [*Data-Forge*](#
 
 Output:
 
-	todo... try this out and get the actual output.
+<pre>
+__index___  Date                                                            Open       High       Low        Close      Volume    Adj Close
+----------  --------------------------------------------------------------  ---------  ---------  ---------  ---------  --------  ---------
+0           Mon Jan 04 2016 00:00:00 GMT+1000 (E. Australia Standard Time)  54.32      54.799999  53.389999  54.799999  52843200  54.799999
+1           Thu Dec 31 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  56.040001  56.189999  55.419998  55.48      26529600  55.48    
+2           Wed Dec 30 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  56.470001  56.779999  56.290001  56.310001  21650300  56.310001
+3           Tue Dec 29 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  56.290001  56.849998  56.060001  56.549999  27489200  56.549999
+4           Mon Dec 28 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  55.349998  55.950001  54.98      55.950001  21698000  55.950001
+</pre>
 
 The above code will work either under [Node.js](https://en.wikipedia.org/wiki/Node.js) or the browser. The main difference is the way Data-Forge is installed, which I'll cover in the next section.
 

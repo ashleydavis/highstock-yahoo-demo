@@ -4,6 +4,8 @@ A demo of [Highstock](http://www.highcharts.com/stock/demo) using [Data-Forge](h
 
 [Click here for live demo](http://codecapers.github.io/highstock-yahoo-demo/).
 
+This post is available on [Code Project](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo).
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -43,7 +45,7 @@ This example demonstrates the following:
 
 ## Getting the code
 
-A zip of the code is attached to the Code Project article (todo, link to article). 
+A zip of the code is attached to [the Code Project article](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo). 
 
 To stay up-to-date I recommend that you clone or fork [the GitHub repo](https://github.com/codecapers/highstock-yahoo-demo). You can also [download an up-to-date zip of the code](https://github.com/codecapers/highstock-yahoo-demo/archive/gh-pages.zip) from GitHub.
 

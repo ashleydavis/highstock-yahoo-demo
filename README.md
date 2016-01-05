@@ -211,19 +211,34 @@ Let's see...
 
 ## Simple moving average
 
-A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average) is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. The code to do this is quite simple:
+A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average) is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge `rollingWindow` function:
 
-	todo: put the code here once the data-forge-indicators package is tested and released. 
+	var computeSMA = function (column, period) {
+        return column.rollingWindow(period, 
+			function (indices, values) {
+                return [
+					indices[indices.length-1], 
+					Enumerable.from(values).sum() / period
+				];
+            }
+		);
+	};
 
-*data-forge-indicators* (installation and setup as described above) provides a convenient function to compute the SMA. So the code for generating a 30-day SMA for Microsoft(including code for Yahoo) can be as simple as follows:
+	var dataFrame = ...
+	var smaPeriod = 30;
+	var column = dataFrame.getColumn('Close');
+	var sma = computeSMA(column, smaPeriod);
+	var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
 
-	dataForge.fromYahoo('MSFT')
-		.then(function (dataFrame) {
-			var period = 30;
-			var sma = dataFrame.getColumn('Close').computeSMA();
-			var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
-			console.log(dataFrameWithSMA.toString());
-		});  
+	console.log(dataFrameWithSMA.toString());
+
+*data-forge-indicators* provides a convenient function to compute the SMA, so using the code can be even simpler:
+
+	var smaPeriod= 30;
+	var sma = dataFrame.getColumn('Close').sma(smaPeriod);
+	var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
+
+	console.log(dataFrameWithSMA.toString());
 
 
 ## Event handling and resize to fit

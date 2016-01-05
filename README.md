@@ -86,7 +86,7 @@ Multiple data series can be stacked on top of each other. This is how the SMA is
 
 In the example code I use the chart types: [*candlestick*](https://en.wikipedia.org/wiki/Candlestick_chart), *line* and *column*. There are [many more chart types available](http://api.highcharts.com/highstock#plotOptions). The [OHLC chart type](http://www.highcharts.com/stock/demo/ohlc) is another you might be interested in that is relevant to financial data.
 
-This example loads data asynchronously when the user zooms in on the data. Initially full data must be loaded so that Highstock has something to show in its [navigator](http://api.highcharts.com/highstock#navigator). The navigator allows the user to see the entire time series and zoom in on parts of it. It is very expensive to download full daily financial data for all time for any company, therefore at the start only monthly data is downloaded. Then as the user zooms in for a closer look weekly or daily data is downloaded as needed. 
+This example loads data asynchronously when the user zooms in on the data. Initially full data must be loaded so that Highstock has something to show in its [navigator](http://api.highcharts.com/highstock#navigator). The navigator allows the user to see the entire time series and zoom in on parts of it. It is very expensive to download full daily financial data for any company, therefore initially only monthly data is downloaded. Then as the user zooms in for a closer look weekly or daily data is downloaded as needed. This helps keep our data load minimal and our load time responsive. 
 
 Highcharts supports asyncronous data download via the [`afterSetExtremes`](http://api.highcharts.com/highstock#xAxis.events.afterSetExtremes) event. You can also see a fairly simple example of this in the [Highstock async loading demo](http://www.highcharts.com/stock/demo/lazy-loading). It looks something like this:
 
@@ -273,6 +273,24 @@ The `resizeChart` function updates the size of the Highstock chart:
         var chart = $('#container').highcharts();
         chart.setSize($(window).width(), $(window).height()-50);
     };
+
+
+`resizeChart` is also called after chart creation to ensure that the chart is immediately set to the correct size. An unusual consequence of this is the that chart data is reloaded immediately after the initial data load (it doesn't happen when the chart's size is adjusted in the future). We don't want our data loading twice, that makes the app slower to load and kind of defeats the purpose of our optimized asynchronous loading. To counter this behaviour I modified `resizeChart` to set `resizingChart` to `true` while the resize is in progress:
+
+    var resizeChart = function () {
+        try {
+            resizingChart = true; // Track that we are resizing.
+            var chart = $('#container').highcharts();
+            chart.setSize($(window).width(), $(window).height()-50);            
+        }
+        finally { 					
+			// Finally clause ensures we never leave dangling state 
+			// should an exception be thrown.
+            resizingChart = false;  // Finished resizing.
+        }
+    };
+
+Now we have `resizingChart` to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock. 
 
 ## Conclusion
 

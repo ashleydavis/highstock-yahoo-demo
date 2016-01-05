@@ -1,6 +1,6 @@
 {
   "name": "data-forge-indicators",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Data-Forge plugin for a variety of financial indicators.",
   "main": "index.js",
   "scripts": {
@@ -30,5 +30,9 @@
   "dependencies": {
     "chai": "^3.4.1",
     "linq": "^3.0.5"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "data-forge": "0.0.10"
   }
 }

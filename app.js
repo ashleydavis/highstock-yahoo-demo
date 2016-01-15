@@ -192,6 +192,11 @@ $(function() {
 
                 var chartOptions =
                 {
+                    chart: {
+                        width: $(window).width(),
+                        height: $(window).height()-50
+                    },
+
                     navigator: {
                         adaptToUpdatedData: false,
                         series: [
@@ -312,8 +317,6 @@ $(function() {
                 
                 // create the chart
                 $('#container').highcharts('StockChart', chartOptions);
-
-                resizeChart();
             })
             .catch(function (err) {
                 console.error(err.stack || err);  

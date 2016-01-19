@@ -294,6 +294,7 @@ img {
 <h1>highstock-yahoo-demo</h1>
 <p>A demo of <a href="http://www.highcharts.com/stock/demo">Highstock</a> using <a href="https://github.com/Real-Serious-Games/data-forge-js">Data-Forge</a> with financial data loaded from Yahoo.</p>
 <p><a href="http://codecapers.github.io/highstock-yahoo-demo/">Click here for live demo</a>.</p>
+<p>This post is available on <a href="http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo">Code Project</a>.</p>
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
@@ -305,29 +306,32 @@ img {
 <li><a href="#pulling-data-from-yahoo">Pulling data from Yahoo</a></li>
 <li><a href="#data-forge">Data-Forge</a></li>
 <li><a href="#simple-moving-average">Simple moving average</a></li>
-<li><a href="#event-handling-and-resize-to-fit">Event handling and resize to fit</a></li>
+<li>
+<a href="#event-handling-and-resize-to-fit">Event handling and resize to fit</a>
+<ul>
+<li><a href="#update-19012016">UPDATE 19/01/2016</a></li>
+</ul>
+</li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#resources">Resources</a></li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-<h2>Introduction</h2>
-<p>This post accompanies and explains my demonstration of <a href="http://www.highcharts.com/products/highstock">Highstock charts</a> using data from Yahoo's financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of <a href="https://en.wikipedia.org/wiki/JavaScript">JavasScript</a> and <a href="https://en.wikipedia.org/wiki/JQuery">jQuery</a>. Most of the useful information you'll find by studying the accompanying example code, in this post I'll give a brief overview of the technology and how it fits together.</p>
+<h2>Introduction</h2>
+<p>This post accompanies and explains my demonstration of <a href="http://www.highcharts.com/products/highstock">Highstock charts</a> using data from Yahoo's financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of <a href="https://en.wikipedia.org/wiki/JavaScript">JavaScript</a> and <a href="https://en.wikipedia.org/wiki/JQuery">jQuery</a>. Most of the useful information you'll find by studying the accompanying example code, in this post I'll give a brief overview of the technology and how it fits together.</p>
 <p>This post introduces the open-source <a href="https://github.com/Real-Serious-Games/data-forge-js">Data-Forge</a> library which is a prototype and a work in progress. I am the main developer of Data-Forge and I want to bring attention to it and elicit feedback. </p>
 <p>I also want to promote Highstock and the Yahoo financial API. I have nothing to do with either of these, I am promoting them purely as an enthusiastic user. I have found them both to be mature and stable and extremely useful.</p>
 <p>The associated example code shows how to use Data-Forge (and various plugins) in the browser. With small variations all the Data-Forge and Yahoo code works under Node.js as well. Highstock is made for the browser and doesn't work (at least not easily) under Node.js.</p>
-<p>The <a href="http://codecapers.github.io/highstock-yahoo-demo/">live demo</a> is published directly from the GitHub repo using <a href="https://pages.github.com/">Github Pages</a>.  
-</p>
+<p>The <a href="http://codecapers.github.io/highstock-yahoo-demo/">live demo</a> is published directly from the GitHub repo using <a href="https://pages.github.com/">Github Pages</a>.  </p>
 <p>This example demonstrates the following:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Asynchronous</a> loading of <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a> into a Highstock <a href="https://en.wikipedia.org/wiki/Candlestick_chart">candlestick chart</a>.</li>
 <li>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is generated and overlaid on the <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a>.</li>
 <li><a href="https://en.wikipedia.org/wiki/Volume_(finance)">Trading volume</a> is displayed below the main stock price chart.</li>
 <li>Variables can be edited (company, SMA period, time interval) and the chart is regenerated.</li>
-<li>The chart resizes to fit the web page.   
-</li>
+<li>The chart resizes to fit the web page.   </li>
 </ul>
 <h2>Getting the code</h2>
-<p>A zip of the code is attached to the Code Project article (todo, link to article). </p>
+<p>A zip of the code is attached to <a href="http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo">the Code Project article</a>. </p>
 <p>To stay up-to-date I recommend that you clone or fork <a href="https://github.com/codecapers/highstock-yahoo-demo">the GitHub repo</a>. You can also <a href="https://github.com/codecapers/highstock-yahoo-demo/archive/gh-pages.zip">download an up-to-date zip of the code</a> from GitHub.</p>
 <p>To run the code locally you need a local copy of the code. Then run a web server in that directory. I recommend installing <a href="https://nodejs.org/en/">Node.js</a> and <a href="https://www.npmjs.com/package/http-server">http-server</a>. Once you have these both installed (which isn't difficult, at least on Windows), running a web server is as simple as:</p>
 <pre><code>cd highstock-yahoo-demo
@@ -467,8 +471,7 @@ dataForge.use(require('data-forge-indicators'));
 <li><a href="https://github.com/data-forge/data-forge-from-yahoo"><em>data-forge-from-yahoo</em></a> wraps up pulling data from Yahoo and delivering us a <em>data-frame</em>.</li>
 <li>Data-Forge parses the CSV data returned from Yahoo and converts it to a data-frame.</li>
 <li><a href="https://github.com/data-forge/data-forge-to-highstock"><em>data-forge-to-highstock</em></a> converts the data-frame to the format expected as by Highstock.</li>
-<li><a href="https://github.com/data-forge/data-forge-indicators"><em>data-forge-indicators</em></a> contains many useful functions, in this example it is used to generate the <a href="#simple-moving-average">simple moving average</a> discussed in the next section.  
-</li>
+<li><a href="https://github.com/data-forge/data-forge-indicators"><em>data-forge-indicators</em></a> contains many useful functions, in this example it is used to generate the <a href="#simple-moving-average">simple moving average</a> discussed in the next section.  </li>
 </ul>
 <h2>Simple moving average</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge <code>rollingWindow</code> function:</p>
@@ -531,7 +534,24 @@ console.log(dataFrameWithSMA.toString());
 };
 </code></pre>
 
-<p>Now we have <code>resizingChart</code> to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock. </p>
+<p>Now we have <code>resizingChart</code> to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock.</p>
+<h3>UPDATE 19/01/2016</h3>
+<p>After recently realizing there was a rendering issue with the volume chart I contacted Highsoft for support. They got back to me very quickly with some suggestions, one of which worked so I've updated this article with the new information.</p>
+<p>As mentioned above, I was calling <code>resizeChart</code> immediately after creating the chart to force it to adopt the size of the window. Something about this was causing the rendering issue. I had already figured out that the issue was something to do with resizing. Resizing the window (which updates the chart size) was causing the rendering issue to disappear.</p>
+<p>Per Highsoft's recommendation I added code to set the size of the chart on creation, rather than sizing it after creation. This change was simple. Chart width and height are now specified in the chart options:</p>
+<pre><code>            var chartOptions =
+            {
+                chart: {
+                    width: $(window).width(),
+                    height: $(window).height()-50
+                },
+
+                // ... all the other options ...
+            };
+</code></pre>
+
+<p>The chart's correct initial size is therefore set on creation and I was able to remove the subsequent call to <code>resizeChart</code>. Problem solved.</p>
+<p>Note that <code>resizeChart</code> is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.</p>
 <h2>Conclusion</h2>
 <p>Through this post I have introduced <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a> and the <a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a>. Data-Forge is an open-source data analysis and transformation toolkit. The Investment Tracker is platform for financial analysis and automation. Both are prototypes and work in progress and I'll appreciate constructive criticism. </p>
 <p>For Data-Forge I'm looking for users and contributors. Please help drive this project forward in whatever way you can! </p>

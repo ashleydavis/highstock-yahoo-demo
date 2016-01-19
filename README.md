@@ -18,6 +18,7 @@ This post is available on [Code Project](http://www.codeproject.com/Articles/106
 - [Data-Forge](#data-forge)
 - [Simple moving average](#simple-moving-average)
 - [Event handling and resize to fit](#event-handling-and-resize-to-fit)
+  - [UPDATE 19/01/2016](#update-19012016)
 - [Conclusion](#conclusion)
 - [Resources](#resources)
 
@@ -290,7 +291,29 @@ The `resizeChart` function updates the size of the Highstock chart:
         }
     };
 
-Now we have `resizingChart` to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock. 
+Now we have `resizingChart` to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock.
+
+### UPDATE 19/01/2016 
+
+After recently realizing there was a rendering issue with the volume chart I contacted Highsoft for support. They got back to me very quickly with some suggestions, one of which worked so I've updated this article with the new information.
+
+As mentioned above, I was calling `resizeChart` immediately after creating the chart to force it to adopt the size of the window. Something about this was causing the rendering issue. I had already figured out that the issue was something to do with resizing. Resizing the window (which updates the chart size) was causing the rendering issue to disappear.
+
+Per Highsoft's recommendation I added code to set the size of the chart on creation, rather than sizing it after creation. This change was simple. Chart width and height are now specified in the chart options:
+
+                var chartOptions =
+                {
+                    chart: {
+                        width: $(window).width(),
+                        height: $(window).height()-50
+                    },
+
+					// ... all the other options ...
+				};
+
+The chart's correct initial size is therefore set on creation and I was able to remove the subsequent call to `resizeChart`. Problem solved.
+
+Note that `resizeChart` is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.
 
 ## Conclusion
 

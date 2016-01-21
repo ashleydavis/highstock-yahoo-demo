@@ -28,6 +28,8 @@ $(function() {
     var loadHighstockData = function (code, options) {
         return dataForge.fromYahoo(code, options)
             .then(function (dataFrame) {
+                curDataFrame = dataFrame; 
+                
                 //todo: data-forge needs a reverse fn.
                 var reversed = Enumerable.from(dataFrame.toObjects())
                     .reverse()
@@ -72,7 +74,7 @@ $(function() {
     });
 
     $('#recalcSMA').click(function () {
-        smaPeriod = $('#SMA-period').val();
+        smaPeriod = parseInt($('#SMA-period').val());
         var chart = $('#container').highcharts();
         if (chart && curDataFrame) {
             computeSMA(chart, curDataFrame);
@@ -129,9 +131,9 @@ $(function() {
     // Compute simple moving average of the price.
     //
     var computeSMA = function (chart, dataFrame) {
-        var sma = dataFrame.setColumn("SMA", 
+        var sma = dataFrame.setSeries("SMA", 
                 dataFrame
-                    .getColumn("Close")
+                    .getSeries("Close")
                     .sma(smaPeriod)
             )
             .getColumnsSubset(["Date", "SMA"])
@@ -167,9 +169,9 @@ $(function() {
             .then(function (dataFrame) {
                 var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
-                var sma = dataFrame.setColumn("SMA", 
+                var sma = dataFrame.setSeries("SMA", 
                         dataFrame
-                            .getColumn("Close")
+                            .getSeries("Close")
                             .sma(smaPeriod)
                     )
                     .getColumnsSubset(["Date", "SMA"])

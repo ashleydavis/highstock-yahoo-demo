@@ -57,5 +57,23 @@ module.exports = function (dataForge) {
             .toArray();
     };
 
+    /**
+     * Convert the column to Highstock date+value format.
+     */
+    dataForge.BaseSeries.prototype.toHighstock = function () {
 
+        var self = this;
+
+        return Enumerable.from(self.getIndex().toValues())
+            .zip(self.toValues(), function (index, value) {
+                assert.instanceOf(index, Date, "Expected column index to contain dates!");
+                assert.isNumber(value, "Expected column values to contain numbers!");
+
+                return [
+                    index.getTime(),
+                    value,
+                ];
+            })
+            .toArray();
+    };
 };

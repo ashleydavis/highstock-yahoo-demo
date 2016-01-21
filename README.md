@@ -241,17 +241,17 @@ A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Sim
 
 	var dataFrame = ...
 	var smaPeriod = 30;
-	var column = dataFrame.getColumn('Close');
-	var sma = computeSMA(column, smaPeriod);
-	var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
+	var close = dataFrame.getSeries('Close');
+	var sma = computeSMA(close, smaPeriod);
+	var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
 
 	console.log(dataFrameWithSMA.toString());
 
 *data-forge-indicators* provides a convenient function to compute the SMA, so using the code can be even simpler:
 
 	var smaPeriod= 30;
-	var sma = dataFrame.getColumn('Close').sma(smaPeriod);
-	var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
+	var sma = dataFrame.getSeries('Close').sma(smaPeriod);
+	var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
 
 	console.log(dataFrameWithSMA.toString());
 

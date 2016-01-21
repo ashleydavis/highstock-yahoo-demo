@@ -488,17 +488,17 @@ dataForge.use(require('data-forge-indicators'));
 
 var dataFrame = ...
 var smaPeriod = 30;
-var column = dataFrame.getColumn('Close');
-var sma = computeSMA(column, smaPeriod);
-var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
+var close = dataFrame.getSeries('Close');
+var sma = computeSMA(close, smaPeriod);
+var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
 
 console.log(dataFrameWithSMA.toString());
 </code></pre>
 
 <p><em>data-forge-indicators</em> provides a convenient function to compute the SMA, so using the code can be even simpler:</p>
 <pre><code>var smaPeriod= 30;
-var sma = dataFrame.getColumn('Close').sma(smaPeriod);
-var dataFrameWithSMA = dataFrame.setColumn('SMA', sma);
+var sma = dataFrame.getSeries('Close').sma(smaPeriod);
+var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
 
 console.log(dataFrameWithSMA.toString());
 </code></pre>

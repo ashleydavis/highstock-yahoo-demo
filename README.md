@@ -230,10 +230,10 @@ A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Sim
 
 	var computeSMA = function (column, period) {
         return column.rollingWindow(period, 
-			function (indices, values) {
+			function (window) {
                 return [
-					indices[indices.length-1], 
-					Enumerable.from(values).sum() / period
+					window.getIndex().last(),	// Index for row in new series. 
+					window.average(),			// Value for row in new series.
 				];
             }
 		);

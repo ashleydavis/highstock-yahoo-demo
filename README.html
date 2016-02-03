@@ -477,10 +477,10 @@ dataForge.use(require('data-forge-indicators'));
 <p>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge <code>rollingWindow</code> function:</p>
 <pre><code>var computeSMA = function (column, period) {
     return column.rollingWindow(period, 
-        function (indices, values) {
+        function (window) {
             return [
-                indices[indices.length-1], 
-                Enumerable.from(values).sum() / period
+                window.getIndex().last(),   // Index for row in new series. 
+                window.average(),           // Value for row in new series.
             ];
         }
     );

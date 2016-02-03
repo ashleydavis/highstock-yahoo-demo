@@ -15,8 +15,8 @@ module.exports = function (dataForge) {
     	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
 
         var self = this;
-        return self.rollingWindow(period, function (indices, values) {
-                return [indices[indices.length-1], Enumerable.from(values).sum() / period];
+        return self.rollingWindow(period, function (window) {
+                return [window.getIndex().last(), window.average()];
             });
     };
 };

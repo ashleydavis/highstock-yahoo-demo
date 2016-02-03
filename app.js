@@ -167,14 +167,11 @@ $(function() {
                 interval: 'monthly'
             })
             .then(function (dataFrame) {
-                var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
-                var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
-                var sma = dataFrame.setSeries("SMA", 
-                        dataFrame
-                            .getSeries("Close")
-                            .sma(smaPeriod)
-                    )
-                    .getColumnsSubset(["Date", "SMA"])
+                dataFrame = dataFrame.setIndex("Date");
+                var price = dataFrame.subset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
+                var volume = dataFrame.getSeries("Volume").toHighstock();
+                var sma = dataFrame.getSeries("Close")
+                    .sma(smaPeriod)
                     .toHighstock();
 
                 var groupingUnits = [

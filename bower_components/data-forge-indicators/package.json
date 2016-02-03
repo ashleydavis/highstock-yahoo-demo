@@ -1,6 +1,6 @@
 {
   "name": "data-forge-indicators",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "description": "Data-Forge plugin for a variety of financial indicators.",
   "main": "index.js",
   "scripts": {

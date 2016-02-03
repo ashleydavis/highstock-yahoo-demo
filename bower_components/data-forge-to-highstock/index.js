@@ -38,21 +38,11 @@ module.exports = function (dataForge) {
     dataForge.BaseDataFrame.prototype.toHighstock = function () {
 
         var self = this;
-		assert(self.getColumnNames().length >= 2); // Expect columns for date + value.
 
-        return Enumerable.from(self.toValues())
-            .where(function (entry) {
-                // Ignore undefined values.
-                return entry[1] !== undefined;
-            })
-            .select(function (entry) {
-            	assert.instanceOf(entry[0], Date, "Expected column 0 to contain dates!");
-            	assert.isNumber(entry[1], "Expected column 1 to contain numbers!");
-
-                return [
-                    entry[0].getTime(),
-                    entry[1],
-                ];
+        return Enumerable.from(self.getIndex().toValues())
+            .zip(self.toValues(), function (index, values) {
+                assert.instanceOf(index, Date, "Expected index to contain dates!");
+                return [index.getTime()].concat(values);
             })
             .toArray();
     };

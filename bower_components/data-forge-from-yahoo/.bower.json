@@ -31,6 +31,6 @@
     "commit": "554c2d0ef2c39812690d570b8a6879f8f2baa0b6"
   },
   "_source": "git://github.com/data-forge/data-forge-from-yahoo.git",
-  "_target": "~0.0.9",
+  "_target": "0.0.9",
   "_originalSource": "data-forge-from-yahoo"
 }

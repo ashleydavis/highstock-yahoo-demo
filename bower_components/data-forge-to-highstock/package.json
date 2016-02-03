@@ -1,6 +1,6 @@
 {
   "name": "data-forge-to-highstock",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "description": "Data-Forge plugin for transforming data to the Highstock format.",
   "main": "index.js",
   "scripts": {

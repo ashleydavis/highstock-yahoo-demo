@@ -28449,10 +28449,7 @@ function extend() {
 
 },{}],245:[function(require,module,exports){
 
-require('./index')(dataForge, {
-		proxyUrl: 'http://crossorigin.me/',
-		encodeUrlForProxy: false,
-	});
+require('./index')(dataForge);
 },{"./index":246}],246:[function(require,module,exports){
 'use strict';
 
@@ -28462,6 +28459,8 @@ module.exports = function (dataForge, globalOptions) {
 	var moment = require('moment');
 
 	globalOptions = globalOptions || {};
+
+	var defaultBaseUrl = globalOptions.baseUrl || 'http://ichart.yahoo.com/table.csv';
 	
 	var request = require('request-promise');
 	
@@ -28472,7 +28471,8 @@ module.exports = function (dataForge, globalOptions) {
 
 		options = options || {};
 
-		var url = 'http://ichart.yahoo.com/table.csv?s=' + code.toUpperCase();
+		var baseUrl = options.baseUrl || defaultBaseUrl;
+		var url = baseUrl + '?s=' + code.toUpperCase();
 
 		if (options.fromDate) {                
 			url += '&a=' + options.fromDate.getMonth(); // Month. Yahoo expects 0-based month.
@@ -28563,13 +28563,19 @@ module.exports = function (dataForge, globalOptions) {
 	//
 	var loadYahooData = function (code, options) {
 
+		options = options || {};
+
 		var url = formatYahooUrl(code, options);
-		if (globalOptions.proxyUrl) {
-			if (globalOptions.encodeUrlForProxy) {
-				url = globalOptions.proxyUrl + encodeURIComponent(url);
+
+		var proxyUrl = options.proxyUrl || globalOptions.proxyUrl;
+
+		if (proxyUrl) {
+			var encodeUrlForProxy = options.encodeUrlForProxy || globalOptions.encodeUrlForProxy;
+			if (encodeUrlForProxy) {
+				url = proxyUrl + encodeURIComponent(url);
 			}
 			else {
-				url = globalOptions.proxyUrl + url;
+				url = proxyUrl + url;
 			}
 		}
 		

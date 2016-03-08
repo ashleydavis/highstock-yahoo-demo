@@ -10,7 +10,7 @@ module.exports = function (dataForge) {
 	 *
 	 * @param {int} period - The time period of the moving average.
 	 */
-    dataForge.BaseSeries.prototype.sma = function (period) {
+    dataForge.Series.prototype.sma = function (period) {
 
     	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
 

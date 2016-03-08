@@ -23,14 +23,14 @@
     "test",
     "tests"
   ],
-  "version": "0.0.9",
-  "_release": "0.0.9",
+  "version": "0.0.13",
+  "_release": "0.0.13",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.9",
-    "commit": "554c2d0ef2c39812690d570b8a6879f8f2baa0b6"
+    "tag": "v0.0.13",
+    "commit": "9c45541e8129817edb0cac7aea76fa84d3e7c029"
   },
   "_source": "git://github.com/data-forge/data-forge-from-yahoo.git",
-  "_target": "0.0.9",
+  "_target": "0.0.13",
   "_originalSource": "data-forge-from-yahoo"
 }

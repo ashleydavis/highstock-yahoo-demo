@@ -8,7 +8,7 @@ module.exports = function (dataForge) {
 	/**
 	 * Convert the data-frame to Highstock date+OHLC format.
 	 */
-	dataForge.BaseDataFrame.prototype.toHighstockOHLC = function () {
+	dataForge.DataFrame.prototype.toHighstockOHLC = function () {
 
         var self = this;
 		assert(self.getColumnNames().length >= 5); // Expect columns for date + OHLC.
@@ -35,7 +35,7 @@ module.exports = function (dataForge) {
     /**
 	 * Convert the data-frame to Highstock date+value format.
      */
-    dataForge.BaseDataFrame.prototype.toHighstock = function () {
+    dataForge.DataFrame.prototype.toHighstock = function () {
 
         var self = this;
 
@@ -50,7 +50,7 @@ module.exports = function (dataForge) {
     /**
      * Convert the column to Highstock date+value format.
      */
-    dataForge.BaseSeries.prototype.toHighstock = function () {
+    dataForge.Series.prototype.toHighstock = function () {
 
         var self = this;
 

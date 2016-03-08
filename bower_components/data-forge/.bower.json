@@ -1,6 +1,6 @@
 {
   "name": "data-forge",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "homepage": "https://github.com/data-forge/data-forge-js-bower",
   "authors": [
     "Ashley Davis <ashley.davis@realseriousgames.com>"
@@ -25,13 +25,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.1.0",
+  "_release": "0.1.4",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.0",
-    "commit": "bcc545d1cf2ed788eda1fd17002b6ef032acc779"
+    "tag": "v0.1.4",
+    "commit": "8112dcf17016a33ba676255922e8ba912f2ce7c5"
   },
   "_source": "git://github.com/Real-Serious-Games/data-forge-js-bower.git",
-  "_target": "0.1.0",
+  "_target": "0.1.4",
   "_originalSource": "data-forge"
 }

@@ -26,14 +26,14 @@
     "test",
     "tests"
   ],
-  "version": "0.0.12",
-  "_release": "0.0.12",
+  "version": "0.0.13",
+  "_release": "0.0.13",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.12",
-    "commit": "30365a7f9ff7e364940c1c32ec6daef7eb2cd74d"
+    "tag": "v0.0.13",
+    "commit": "78a2f01559dd7c6b4414ef33a2a43232064d3c25"
   },
   "_source": "git://github.com/data-forge/data-forge-indicators.git",
-  "_target": "0.0.12",
+  "_target": "0.0.13",
   "_originalSource": "data-forge-indicators"
 }

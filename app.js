@@ -26,7 +26,12 @@ $(function() {
     // Load data in format required by highstock.
     //
     var loadHighstockData = function (code, options) {
-        return dataForge.fromYahoo(code, options)
+
+        var extendedOptions = $.extend({}, options, {
+            proxyUrl: 'http://crossorigin.me/', // Proxy to avoid CORS restrictions.
+        });
+
+        return dataForge.fromYahoo(code, extendedOptions)
             .then(function (dataFrame) {
                 curDataFrame = dataFrame; 
                 

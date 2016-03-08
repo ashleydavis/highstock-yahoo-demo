@@ -24,14 +24,14 @@
     "test",
     "tests"
   ],
-  "version": "0.0.14",
-  "_release": "0.0.14",
+  "version": "0.0.15",
+  "_release": "0.0.15",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.14",
-    "commit": "5aed65a725f68838ce3280dae5519927d855dda1"
+    "tag": "v0.0.15",
+    "commit": "4d9ac38d889d656eba9208a1cfb6fbcf59e3edd8"
   },
   "_source": "git://github.com/data-forge/data-forge-to-highstock.git",
-  "_target": "0.0.14",
+  "_target": "0.0.15",
   "_originalSource": "data-forge-to-highstock"
 }

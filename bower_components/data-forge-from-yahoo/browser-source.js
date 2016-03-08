@@ -1,5 +1,2 @@
 
-require('./index')(dataForge, {
-		proxyUrl: 'http://crossorigin.me/',
-		encodeUrlForProxy: false,
-	});
+require('./index')(dataForge);

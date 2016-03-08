@@ -28,7 +28,7 @@ $(function() {
     var loadHighstockData = function (code, options) {
 
         var extendedOptions = $.extend({}, options, {
-            proxyUrl: 'http://crossorigin.me/', // Proxy to avoid CORS restrictions.
+            baseUrl: location.protocol + '//' + location.hostname + ':' + location.port + '/yahoo',
         });
 
         return dataForge.fromYahoo(code, extendedOptions)

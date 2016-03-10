@@ -39,11 +39,13 @@ var startServer = function (done) {
 		console.log('Proxying: ' + url);
 
 		request(url)
-			.then(result => {
+			.then(function (result) {
 				res.set('Content-Type', 'text/csv');
 				res.send(result).end();
 			})
-			.catch(e => console.error(e));
+			.catch(function (e) {
+				console.error(e)
+			});
 
 	});
 

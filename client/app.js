@@ -33,14 +33,8 @@ $(function() {
 
         return dataForge.fromYahoo(code, extendedOptions)
             .then(function (dataFrame) {
-                curDataFrame = dataFrame; 
-                
-                //todo: data-forge needs a reverse fn.
-                var reversed = Enumerable.from(dataFrame.toObjects())
-                    .reverse()
-                    .toArray();
-
-                return new dataForge.DataFrame({ rows: reversed });
+                curDataFrame = dataFrame.reverse();
+                return curDataFrame;
             });
     };
 
@@ -136,12 +130,8 @@ $(function() {
     // Compute simple moving average of the price.
     //
     var computeSMA = function (chart, dataFrame) {
-        var sma = dataFrame.setSeries("SMA", 
-                dataFrame
-                    .getSeries("Close")
-                    .sma(smaPeriod)
-            )
-            .getColumnsSubset(["Date", "SMA"])
+        var sma = dataFrame.getSeries("Close")
+            .sma(smaPeriod)
             .toHighstock();
         chart.series[1].setData(sma);
     };

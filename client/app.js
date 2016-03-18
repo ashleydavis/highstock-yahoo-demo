@@ -33,7 +33,9 @@ $(function() {
 
         return dataForge.fromYahoo(code, extendedOptions)
             .then(function (dataFrame) {
-                curDataFrame = dataFrame.reverse();
+                curDataFrame = dataFrame.reverse()
+                    .setIndex("Date")
+                    .bake();
                 return curDataFrame;
             });
     };
@@ -162,7 +164,6 @@ $(function() {
                 interval: 'monthly'
             })
             .then(function (dataFrame) {
-                dataFrame = dataFrame.setIndex("Date");
                 var price = dataFrame.subset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
                 var volume = dataFrame.getSeries("Volume").toHighstock();
                 var sma = dataFrame.getSeries("Close")

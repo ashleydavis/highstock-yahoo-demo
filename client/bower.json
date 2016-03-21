@@ -22,7 +22,7 @@
     "moment": "~2.10.6",
     "data-forge": "0.1.9",
     "data-forge-from-yahoo": "0.0.19",
-    "data-forge-to-highstock": "0.0.16",
+    "data-forge-to-highstock": "0.0.17",
     "data-forge-indicators": "0.0.13"
   }
 }

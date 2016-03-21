@@ -164,7 +164,7 @@ $(function() {
                 interval: 'monthly'
             })
             .then(function (dataFrame) {
-                var price = dataFrame.subset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
+                var price = dataFrame.toHighstockOHLC();
                 var volume = dataFrame.getSeries("Volume").toHighstock();
                 var sma = dataFrame.getSeries("Close")
                     .sma(smaPeriod)

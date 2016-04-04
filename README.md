@@ -26,7 +26,7 @@ This post is published on [Code Project](http://www.codeproject.com/Articles/106
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Update 04-04-2016
+## Update 2016-04-04
 
 I've removed the CORS server that I was using. This proved problematic so I no longer recommend the technique. The code for this article now includes a simple NodeJS proxy server for the Yahoo financial API. The live demo is now deployed on Azure. For details on this update please see the new sections below. 
 
@@ -378,7 +378,7 @@ The chart's correct initial size is therefore set on creation and I was able to 
 
 Note that `resizeChart` is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.
 
-## Azure deployment (new 04-04-2016)
+## Azure deployment (new 2016-04-04)
 
 After moving from a public CORS proxy to my own proxy server I needed somewhere to host the [live demo](http://highstock-yahoo-demo.azurewebsites.net/). I decide to deploy it as an [Azure](https://en.wikipedia.org/wiki/Microsoft_Azure) *Web App*, on the lowest tier that's basically free which is useful for this kind of demo.
 

@@ -14,7 +14,7 @@
 <li><a href="#screenshot">Screenshot</a></li>
 <li><a href="#highstock">Highstock</a></li>
 <li><a href="#pulling-data-from-yahoo">Pulling data from Yahoo</a></li>
-<li><a href="#diy-yahoo-proxy-new-2016-04-04">DIY Yahoo proxy (new 04-04-2016)</a></li>
+<li><a href="#diy-yahoo-proxy-new-2016-04-04">DIY Yahoo proxy (new 2016-04-04)</a></li>
 <li><a href="#data-forge">Data-Forge</a></li>
 <li><a href="#simple-moving-average">Simple moving average</a></li>
 <li>
@@ -23,7 +23,7 @@
 <li><a href="#update-19012016">UPDATE 19/01/2016</a></li>
 </ul>
 </li>
-<li><a href="#azure-deployment-new-2016-04-04">Azure deployment (new 04-04-2016)</a></li>
+<li><a href="#azure-deployment-new-2016-04-04">Azure deployment (new 2016-04-04)</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#resources">Resources</a></li>
 </ul>
@@ -35,8 +35,7 @@
 <p>This post introduces the open-source <a href="https://github.com/Real-Serious-Games/data-forge-js">Data-Forge</a> library which is a prototype and a work in progress. I am the main developer of Data-Forge and I want to bring attention to it and elicit feedback. </p>
 <p>I also want to promote Highstock and the Yahoo financial API. I have nothing to do with either of these, I am promoting them purely as an enthusiastic user. I have found them both to be mature and stable and extremely useful.</p>
 <p>The associated example code shows how to use Data-Forge (and various plugins) in the browser. With small variations all the Data-Forge and Yahoo code works under Node.js as well. Highstock is made for the browser and doesn't work (at least not easily) under Node.js.</p>
-<p>The <a href="http://codecapers.github.io/highstock-yahoo-demo/">live demo</a> is published directly from the GitHub repo using <a href="https://pages.github.com/">Github Pages</a>.  
-</p>
+<p>The <a href="http://highstock-yahoo-demo.azurewebsites.net/">live demo</a> is deployed to Azure directly from the <a href="https://github.com/codecapers/highstock-yahoo-demo">GitHub repo</a>. </p>
 <p>This example demonstrates the following:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Asynchronous</a> loading of <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a> into a Highstock <a href="https://en.wikipedia.org/wiki/Candlestick_chart">candlestick chart</a>.</li>
@@ -46,7 +45,7 @@
 <li>The chart resizes to fit the web page.   
 </li>
 </ul>
-<h2>Getting the code (updated 04-04-2016)</h2>
+<h2>Getting the code (updated 2016-04-04)</h2>
 <p>A zip of the code is attached to <a href="http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo">the Code Project article</a>. </p>
 <p>To stay up-to-date I recommend that you clone or fork <a href="https://github.com/codecapers/highstock-yahoo-demo">the GitHub repo</a>. You can also <a href="https://github.com/codecapers/highstock-yahoo-demo/archive/dev.zip">download an up-to-date zip of the code</a> from GitHub.</p>
 <p>To run the server locally you'll need to install <a href="https://nodejs.org/en/">Node.js</a>. With NodeJS installed you can run the following commands:</p>
@@ -153,8 +152,8 @@ __index___  Date                                                            Open
 </pre>
 <p>The above code is meant to work under the browser. We can't hit the Yahoo directly due to <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">cross-original resource sharing (CORS)</a> restrictions, this is why we must use a proxy. As you can see <code>baseURL</code> is set to point to a proxy server. This same code will work under <a href="https://en.wikipedia.org/wiki/Node.js">Node.js</a>, but we won't need to set the <code>baseURL</code>, there is now CORS restriction so we can hit the Yahoo API directly from Node.js. </p>
 <h3>DIY Yahoo proxy (new 2016-04-04)</h3>
-<p>In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work every well. There were various problems such as the proxy not always being available. </p>
-<p>So I built my own very simple proxy server. It actual has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.</p>
+<p>In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work very well. There were various problems such as the proxy not always being available. </p>
+<p>So I built my own very simple proxy server. It actually has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.</p>
 <p>This is a fairly simple Node.js application serving static pages with a simple REST API that is relayed to the Yahoo API: </p>
 <pre><code>var path = require('path');
 var express = require('express');
@@ -191,6 +190,7 @@ app.get('/yahoo', function (req, res) {
         }); 
 });
 
+// Start the server.
 var server = app.listen(process.env.PORT || 3000, function () {
 
     var host = server.address().address
@@ -326,7 +326,8 @@ console.log(dataFrameWithSMA.toString());
 <p>Note that <code>resizeChart</code> is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.</p>
 <h2>Azure deployment (new 2016-04-04)</h2>
 <p>After moving from a public CORS proxy to my own proxy server I needed somewhere to host the <a href="http://highstock-yahoo-demo.azurewebsites.net/">live demo</a>. I decide to deploy it as an <a href="https://en.wikipedia.org/wiki/Microsoft_Azure">Azure</a> <em>Web App</em>, on the lowest tier that's basically free which is useful for this kind of demo.</p>
-<p>When I was learnign how to deploy a Node.js app to Azure I built two small examples. The <a href="https://github.com/ashleydavis/simple-azure-deployment-test">first and simplest example</a> demonstrates how to roll out the simplest possible web page to an Azure Web App. The <a href="https://github.com/ashleydavis/nodejs-azure-deployment-test">second example</a> shows how to deploy out a simple Node.js app to Azure.</p>
+<p>While I was learning how to deploy a Node.js app to Azure I built two small examples. The <a href="https://github.com/ashleydavis/simple-azure-deployment-test">first and simplest example</a> demonstrates how to roll out the simplest possible web page to an Azure Web App. The <a href="https://github.com/ashleydavis/nodejs-azure-deployment-test">second example</a> shows how to deploy out a simple Node.js app to Azure.</p>
+<p>The github repo that hosts the code is setup to be directly deployed to Azure. </p>
 <h2>Conclusion</h2>
 <p>Through this post I have introduced <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a> and the <a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a>. Data-Forge is an open-source data analysis and transformation toolkit. The Investment Tracker is platform for financial analysis and automation. Both are prototypes and work in progress and I'll appreciate constructive criticism. </p>
 <p>For Data-Forge I'm looking for users and contributors. Please help drive this project forward in whatever way you can! </p>

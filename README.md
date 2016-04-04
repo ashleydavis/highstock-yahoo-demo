@@ -6,6 +6,8 @@ A demo of [Highstock](http://www.highcharts.com/stock/demo) using [Data-Forge](h
 
 This post is published on [Code Project](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo).
 
+[Click here for the Github repo](https://github.com/codecapers/highstock-yahoo-demo).
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -15,12 +17,12 @@ This post is published on [Code Project](http://www.codeproject.com/Articles/106
 - [Screenshot](#screenshot)
 - [Highstock](#highstock)
 - [Pulling data from Yahoo](#pulling-data-from-yahoo)
-- [DIY Yahoo proxy (new 04-04-2016)](#diy-yahoo-proxy-new-2016-04-04)
+- [DIY Yahoo proxy (new 2016-04-04)](#diy-yahoo-proxy-new-2016-04-04)
 - [Data-Forge](#data-forge)
 - [Simple moving average](#simple-moving-average)
 - [Event handling and resize to fit](#event-handling-and-resize-to-fit)
   - [UPDATE 19/01/2016](#update-19012016)
-- [Azure deployment (new 04-04-2016)](#azure-deployment-new-2016-04-04)
+- [Azure deployment (new 2016-04-04)](#azure-deployment-new-2016-04-04)
 - [Conclusion](#conclusion)
 - [Resources](#resources)
 
@@ -40,7 +42,7 @@ I also want to promote Highstock and the Yahoo financial API. I have nothing to 
 
 The associated example code shows how to use Data-Forge (and various plugins) in the browser. With small variations all the Data-Forge and Yahoo code works under Node.js as well. Highstock is made for the browser and doesn't work (at least not easily) under Node.js.
 
-The [live demo](http://codecapers.github.io/highstock-yahoo-demo/) is published directly from the GitHub repo using [Github Pages](https://pages.github.com/).  
+The [live demo](http://highstock-yahoo-demo.azurewebsites.net/) is deployed to Azure directly from the [GitHub repo](https://github.com/codecapers/highstock-yahoo-demo). 
 
 This example demonstrates the following:
 
@@ -50,7 +52,7 @@ This example demonstrates the following:
 - Variables can be edited (company, SMA period, time interval) and the chart is regenerated.
 - The chart resizes to fit the web page.   
 
-## Getting the code (updated 04-04-2016)
+## Getting the code (updated 2016-04-04)
 
 A zip of the code is attached to [the Code Project article](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo). 
 
@@ -190,9 +192,9 @@ The above code is meant to work under the browser. We can't hit the Yahoo direct
 
 ### DIY Yahoo proxy (new 2016-04-04)
 
-In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work every well. There were various problems such as the proxy not always being available. 
+In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work very well. There were various problems such as the proxy not always being available. 
 
-So I built my own very simple proxy server. It actual has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.
+So I built my own very simple proxy server. It actually has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.
 
 This is a fairly simple Node.js application serving static pages with a simple REST API that is relayed to the Yahoo API: 
 
@@ -231,6 +233,7 @@ This is a fairly simple Node.js application serving static pages with a simple R
 			});	
 	});
 	
+	// Start the server.
 	var server = app.listen(process.env.PORT || 3000, function () {
 	
 		var host = server.address().address
@@ -382,7 +385,9 @@ Note that `resizeChart` is still used to adjust the chart size after the window 
 
 After moving from a public CORS proxy to my own proxy server I needed somewhere to host the [live demo](http://highstock-yahoo-demo.azurewebsites.net/). I decide to deploy it as an [Azure](https://en.wikipedia.org/wiki/Microsoft_Azure) *Web App*, on the lowest tier that's basically free which is useful for this kind of demo.
 
-When I was learnign how to deploy a Node.js app to Azure I built two small examples. The [first and simplest example](https://github.com/ashleydavis/simple-azure-deployment-test) demonstrates how to roll out the simplest possible web page to an Azure Web App. The [second example](https://github.com/ashleydavis/nodejs-azure-deployment-test) shows how to deploy out a simple Node.js app to Azure.
+While I was learning how to deploy a Node.js app to Azure I built two small examples. The [first and simplest example](https://github.com/ashleydavis/simple-azure-deployment-test) demonstrates how to roll out the simplest possible web page to an Azure Web App. The [second example](https://github.com/ashleydavis/nodejs-azure-deployment-test) shows how to deploy out a simple Node.js app to Azure.
+
+The github repo that hosts the code is setup to be directly deployed to Azure. 
 
 ## Conclusion
 

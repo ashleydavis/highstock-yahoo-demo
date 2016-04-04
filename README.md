@@ -2,9 +2,9 @@
 
 A demo of [Highstock](http://www.highcharts.com/stock/demo) using [Data-Forge](https://github.com/Real-Serious-Games/data-forge-js) with financial data loaded from Yahoo.
 
-[Click here for live demo](http://codecapers.github.io/highstock-yahoo-demo/).
+[Click here for live demo](http://highstock-yahoo-demo.azurewebsites.net/).
 
-This post is available on [Code Project](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo).
+This post is published on [Code Project](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -15,14 +15,20 @@ This post is available on [Code Project](http://www.codeproject.com/Articles/106
 - [Screenshot](#screenshot)
 - [Highstock](#highstock)
 - [Pulling data from Yahoo](#pulling-data-from-yahoo)
+- [DIY Yahoo proxy (new 04-04-2016)](#DIY-Yahoo-proxy-(new-04-04-2016))
 - [Data-Forge](#data-forge)
 - [Simple moving average](#simple-moving-average)
 - [Event handling and resize to fit](#event-handling-and-resize-to-fit)
   - [UPDATE 19/01/2016](#update-19012016)
+- [Azure deployment (new 04-04-2016)](#Azure-deployment-(new-04-04-2016))
 - [Conclusion](#conclusion)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Update 04-04-2016
+
+I've removed the CORS server that I was using. This proved problematic so I no longer recommend the technique. The code for this article now includes a simple NodeJS proxy server for the Yahoo financial API. The live demo is now deployed on Azure. For details on this update please see the new sections below. 
 
 ## Introduction
 
@@ -44,25 +50,28 @@ This example demonstrates the following:
 - Variables can be edited (company, SMA period, time interval) and the chart is regenerated.
 - The chart resizes to fit the web page.   
 
-## Getting the code
+## Getting the code (updated 04-04-2016)
 
 A zip of the code is attached to [the Code Project article](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo). 
 
-To stay up-to-date I recommend that you clone or fork [the GitHub repo](https://github.com/codecapers/highstock-yahoo-demo). You can also [download an up-to-date zip of the code](https://github.com/codecapers/highstock-yahoo-demo/archive/gh-pages.zip) from GitHub.
+To stay up-to-date I recommend that you clone or fork [the GitHub repo](https://github.com/codecapers/highstock-yahoo-demo). You can also [download an up-to-date zip of the code](https://github.com/codecapers/highstock-yahoo-demo/archive/dev.zip) from GitHub.
 
-To run the code locally you need a local copy of the code. Then run a web server in that directory. I recommend installing [Node.js](https://nodejs.org/en/) and [http-server](https://www.npmjs.com/package/http-server). Once you have these both installed (which isn't difficult, at least on Windows), running a web server is as simple as:
+To run the server locally you'll need to install [Node.js](https://nodejs.org/en/). With NodeJS installed you can run the following commands:
 
 	cd highstock-yahoo-demo
-	http-server
+	npm install 
+	cd client
+	bower install
+	cd ..
+	node index.js
 
-You can now put [http://localhost:8080](http://localhost:8080) in your browser to see it running. 
+You can now go to [http://localhost:8080](http://localhost:8080) in your browser to see it running. 
 
 ## Screenshot
 
 In case the live demo is down... here is a screenshot.
 
 ![](screenshot.png)
-
 
 
 ## Highstock
@@ -153,7 +162,11 @@ Of course, the example code doesn't directly hit the Yahoo API. [*Data-Forge*](#
 	var dataForge = require('data-forge');
 	dataForge.use(require('data-forge-from-yahoo'));
 
-	dataForge.fromYahoo('MSFT')
+	var options = {
+		baseUrl: location.protocol + '//' + location.hostname + ':' + location.port + '/yahoo',
+	};
+
+	dataForge.fromYahoo('MSFT', options)
 		.then(function (dataFrame) {
 			console.log(dataFrame.take(5).toString());
 		})
@@ -173,9 +186,59 @@ __index___  Date                                                            Open
 4           Mon Dec 28 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  55.349998  55.950001  54.98      55.950001  21698000  55.950001
 </pre>
 
-The above code will work either under [Node.js](https://en.wikipedia.org/wiki/Node.js) or the browser. The main difference is the way Data-Forge is installed, which I'll cover in the next section.
+The above code is meant to work under the browser. We can't hit the Yahoo directly due to [cross-original resource sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) restrictions, this is why we must use a proxy. As you can see `baseURL` is set to point to a proxy server. This same code will work under [Node.js](https://en.wikipedia.org/wiki/Node.js), but we won't need to set the `baseURL`, there is now CORS restriction so we can hit the Yahoo API directly from Node.js. 
 
-Internally there is a major difference. Under the browser, due to [cross-original resource sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) restrictions, we can't directly pull data from the the Yahoo API the way we can under Node.js. For this reason a proxy URL specified to data-forge-from-yahoo that uses to proxy the Yahoo REST API. (Using [http://cors.io](http://cors.io) as the proxy service). The proxy URL can also be set explicitly to any custom proxy URL desired by the user.
+### DIY Yahoo proxy (new 2016-04-04)
+
+In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work every well. There were various problems such as the proxy not always being available. 
+
+So I built my own very simple proxy server. It actual has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.
+
+This is a fairly simple Node.js application serving static pages with a simple REST API that is relayed to the Yahoo API: 
+
+	var path = require('path');
+	var express = require('express');
+	var request = require('request-promise');
+	var E = require('linq');
+	
+	var yahooBaseUrl = 'http://ichart.yahoo.com/table.csv';
+	
+	var app = express();
+	
+	// Serve static files.
+	var staticPath = path.join(__dirname, 'client');
+	console.log(staticPath);
+	app.use(express.static(staticPath));
+	
+	// REST API that relays to the Yahoo API.
+	app.get('/yahoo', function (req, res) {
+	
+		var queryParams = E.from(Object.keys(req.query))
+			.select(function (paramName) {
+				return paramName + '=' + req.query[paramName];
+			})
+			.toArray()
+			.join('&');
+	
+		var url = yahooBaseUrl + '?' + queryParams;
+		request(url)
+			.then(function (result) {
+				res.set('Content-Type', 'text/csv');
+				res.send(result).end();
+			})
+			.catch(function (e) {
+				console.error(e)
+			});	
+	});
+	
+	var server = app.listen(process.env.PORT || 3000, function () {
+	
+		var host = server.address().address
+		var port = server.address().port
+	
+		console.log('Example app listening at http://%s:%s', host, port)
+	});
+
 
 ## Data-Forge
 
@@ -315,6 +378,12 @@ The chart's correct initial size is therefore set on creation and I was able to 
 
 Note that `resizeChart` is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.
 
+## Azure deployment (new 04-04-2016)
+
+After moving from a public CORS proxy to my own proxy server I needed somewhere to host the [live demo](http://highstock-yahoo-demo.azurewebsites.net/). I decide to deploy it as an [Azure](https://en.wikipedia.org/wiki/Microsoft_Azure) *Web App*, on the lowest tier that's basically free which is useful for this kind of demo.
+
+When I was learnign how to deploy a Node.js app to Azure I built two small examples. The [first and simplest example](https://github.com/ashleydavis/simple-azure-deployment-test) demonstrates how to roll out the simplest possible web page to an Azure Web App. The [second example](https://github.com/ashleydavis/nodejs-azure-deployment-test) shows how to deploy out a simple Node.js app to Azure.
+
 ## Conclusion
 
 Through this post I have introduced [Data-Forge](https://github.com/real-serious-games/data-forge-js) and the [Investment Tracker](http://investment-tracker.cloudapp.net/). Data-Forge is an open-source data analysis and transformation toolkit. The Investment Tracker is platform for financial analysis and automation. Both are prototypes and work in progress and I'll appreciate constructive criticism. 
@@ -329,7 +398,7 @@ In the example code I've demonstrated how to retrieve financial data from Yahoo 
 - Highstock docs: [http://www.highcharts.com/docs](http://www.highcharts.com/docs)
 - Highstock API reference: [http://api.highcharts.com/highstock](http://api.highcharts.com/highstock)
 - Data-Forge: [https://github.com/real-serious-games/data-forge-js](https://github.com/real-serious-games/data-forge-js)
-- cors.io (CORS proxy): [http://cors.io/](http://cors.io/)
+
 
 
 

@@ -9,96 +9,77 @@
 <p><a href="http://codecapers.github.io/highstock-yahoo-demo/README.html">Article also hosted on GitHub</a>.</p>
 
 <ul>
-	<li><a href="#introduction">Introduction</a></li>
-	<li><a href="#getting-the-code">Getting the code</a></li>
-	<li><a href="#screenshot">Screenshot</a></li>
-	<li><a href="#highstock">Highstock</a></li>
-	<li><a href="#pulling-data-from-yahoo">Pulling data from Yahoo</a></li>
-	<li><a href="#data-forge">Data-Forge</a></li>
-	<li><a href="#simple-moving-average">Simple moving average</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#getting-the-code">Getting the code</a></li>
+<li><a href="#screenshot">Screenshot</a></li>
+<li><a href="#highstock">Highstock</a></li>
+<li><a href="#pulling-data-from-yahoo">Pulling data from Yahoo</a></li>
+<li><a href="#diy-yahoo-proxy-new-2016-04-04">DIY Yahoo proxy (new 04-04-2016)</a></li>
+<li><a href="#data-forge">Data-Forge</a></li>
+<li><a href="#simple-moving-average">Simple moving average</a></li>
 <li>
 <a href="#event-handling-and-resize-to-fit">Event handling and resize to fit</a>
 <ul>
-<li><a href="#resize-update-19-01-2016">UPDATE 19/01/2016</a></li>
-</ul>
-	<li><a href="#conclusion">Conclusion</a></li>
-	<li><a href="#resources">Resources</a></li>
+<li><a href="#update-19012016">UPDATE 19/01/2016</a></li>
 </ul>
 </li>
-
-<h2><a id="introduction" name="introduction">Introduction</a></h2>
-
-<p>This post accompanies and explains my demonstration of <a href="http://www.highcharts.com/products/highstock">Highstock charts</a> using data from Yahoo&#39;s financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of <a href="https://en.wikipedia.org/wiki/JavaScript">JavaScript</a> and <a href="https://en.wikipedia.org/wiki/JQuery">jQuery</a>. Most of the useful information you&#39;ll find by studying the accompanying example code, in this post I&#39;ll give a brief overview of the technology and how it fits together.</p>
-
-<p>This post introduces the open-source <a href="https://github.com/Real-Serious-Games/data-forge-js">Data-Forge</a> library which is a prototype and a work in progress. I am the main developer of Data-Forge and I want to bring attention to it and elicit feedback.</p>
-
-<p>I also want to promote Highstock and the Yahoo financial API. I have nothing to do with either of these, I am promoting them purely as an enthusiastic user. I have found them both to be mature and stable and extremely useful.</p>
-
-<p>The associated example code shows how to use Data-Forge (and various plugins) in the browser. With small variations all the Data-Forge and Yahoo code works under Node.js as well. Highstock is made for the browser and doesn&#39;t work (at least not easily) under Node.js.</p>
-
-<p>The <a href="http://codecapers.github.io/highstock-yahoo-demo/">live demo</a> is published directly from the GitHub repo using <a href="https://pages.github.com/">Github Pages</a>.</p>
-
-<p>This example demonstrates the following:</p>
-
-<ul>
-	<li><a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Asynchronous</a> loading of <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a> into a Highstock <a href="https://en.wikipedia.org/wiki/Candlestick_chart">candlestick chart</a>.</li>
-	<li>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is generated and overlaid on the <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a>.</li>
-	<li><a href="https://en.wikipedia.org/wiki/Volume_(finance)">Trading volume</a> is displayed below the main stock price chart.</li>
-	<li>Variables can be edited (company, SMA period, time interval) and the chart is regenerated.</li>
-	<li>The chart resizes to fit the web page.</li>
+<li><a href="#azure-deployment-new-2016-04-04">Azure deployment (new 04-04-2016)</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#resources">Resources</a></li>
 </ul>
-
-<h2><a id="getting-the-code" name="getting-the-code">Getting the code</a></h2>
-
-<p>A zip of the code is attached to this article.</p>
-
-<p>To stay up-to-date I recommend that you clone or fork <a href="https://github.com/codecapers/highstock-yahoo-demo">the GitHub repo</a>. You can also <a href="https://github.com/codecapers/highstock-yahoo-demo/archive/gh-pages.zip">download an up-to-date zip of the code</a> from GitHub.</p>
-
-<p>To run the code locally you need a local copy of the code. Then run a web server in that directory. I recommend installing <a href="https://nodejs.org/en/">Node.js</a> and <a href="https://www.npmjs.com/package/http-server">http-server</a>. Once you have these both installed (which isn&#39;t difficult, at least on Windows), running a web server is as simple as:</p>
-
-<pre>
-<code>cd highstock-yahoo-demo
-http-server
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<h2>Update 2016-04-04</h2>
+<p>I've removed the CORS server that I was using. This proved problematic so I no longer recommend the technique. The code for this article now includes a simple NodeJS proxy server for the Yahoo financial API. The live demo is now deployed on Azure. For details on this update please see the new sections below. </p>
+<h2>Introduction</h2>
+<p>This post accompanies and explains my demonstration of <a href="http://www.highcharts.com/products/highstock">Highstock charts</a> using data from Yahoo's financial API. It is aimed at developers interested in processing and visualisation of financial data. You should have at least a basic knowledge of <a href="https://en.wikipedia.org/wiki/JavaScript">JavaScript</a> and <a href="https://en.wikipedia.org/wiki/JQuery">jQuery</a>. Most of the useful information you'll find by studying the accompanying example code, in this post I'll give a brief overview of the technology and how it fits together.</p>
+<p>This post introduces the open-source <a href="https://github.com/Real-Serious-Games/data-forge-js">Data-Forge</a> library which is a prototype and a work in progress. I am the main developer of Data-Forge and I want to bring attention to it and elicit feedback. </p>
+<p>I also want to promote Highstock and the Yahoo financial API. I have nothing to do with either of these, I am promoting them purely as an enthusiastic user. I have found them both to be mature and stable and extremely useful.</p>
+<p>The associated example code shows how to use Data-Forge (and various plugins) in the browser. With small variations all the Data-Forge and Yahoo code works under Node.js as well. Highstock is made for the browser and doesn't work (at least not easily) under Node.js.</p>
+<p>The <a href="http://codecapers.github.io/highstock-yahoo-demo/">live demo</a> is published directly from the GitHub repo using <a href="https://pages.github.com/">Github Pages</a>.  
+</p>
+<p>This example demonstrates the following:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Asynchronous</a> loading of <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a> into a Highstock <a href="https://en.wikipedia.org/wiki/Candlestick_chart">candlestick chart</a>.</li>
+<li>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is generated and overlaid on the <a href="https://en.wikipedia.org/wiki/Open-high-low-close_chart">OHLC data</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Volume_(finance)">Trading volume</a> is displayed below the main stock price chart.</li>
+<li>Variables can be edited (company, SMA period, time interval) and the chart is regenerated.</li>
+<li>The chart resizes to fit the web page.   
+</li>
+</ul>
+<h2>Getting the code (updated 04-04-2016)</h2>
+<p>A zip of the code is attached to <a href="http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo">the Code Project article</a>. </p>
+<p>To stay up-to-date I recommend that you clone or fork <a href="https://github.com/codecapers/highstock-yahoo-demo">the GitHub repo</a>. You can also <a href="https://github.com/codecapers/highstock-yahoo-demo/archive/dev.zip">download an up-to-date zip of the code</a> from GitHub.</p>
+<p>To run the server locally you'll need to install <a href="https://nodejs.org/en/">Node.js</a>. With NodeJS installed you can run the following commands:</p>
+<pre><code>cd highstock-yahoo-demo
+npm install 
+cd client
+bower install
+cd ..
+node index.js
 </code></pre>
 
-<p>You can now put <a href="http://localhost:8080">http://localhost:8080</a> in your browser to see it running.</p>
-
-<h2><a id="screenshot" name="screenshot">Screenshot</a></h2>
-
+<p>You can now go to <a href="http://localhost:8080">http://localhost:8080</a> in your browser to see it running. </p>
+<h2>Screenshot</h2>
 <p>In case the live demo is down... here is a screenshot.</p>
-
-<p><img alt="" src="screenshot.png" /></p>
-
-<h2><a id="highstock" name="highstock">Highstock</a></h2>
-
+<p><img src="screenshot.png" /></p>
+<h2>Highstock</h2>
 <p>Highstock is a pure Javascript, client-side stock charting library that is free for non-commercial use. The company behind Highstock, <a href="https://en.wikipedia.org/wiki/Highsoft">Highsoft</a>, also have a general charting library called <a href="https://en.wikipedia.org/wiki/Highcharts">Highcharts</a>. Highsoft have many commercial customers and their libraries are stable and mature.</p>
-
 <p>For this example code I started with the <a href="http://www.highcharts.com/stock/demo/lazy-loading">Highstock async loading demo</a>. I also incorporated elements of the <a href="http://www.highcharts.com/stock/demo/candlestick-and-volume">candlestick and volume demo</a>.</p>
-
 <p>There are <a href="http://www.highcharts.com/stock/demo">many other demos</a> of Highstock that give a good undestanding of its full capabilities. Highstock also has good <a href="http://www.highcharts.com/docs">docs</a> and an <a href="http://api.highcharts.com/highstock">API</a> reference. Read these docs for a full understand of Highstock.</p>
-
 <p>The basic setup for Highstock is quite simple. Use jQuery to get the element that will contain the chart and call the <code>highcharts</code> function. Pass in the options to configure the chart and provide data:</p>
-
-<pre>
-<code>var chartOptions = {
+<pre><code>var chartOptions = {
     // ... options that defined the chart ...
 };
 
-$(&#39;#container&#39;).highcharts(&#39;StockChart&#39;, chartOptions);  
+$('#container').highcharts('StockChart', chartOptions);  
 </code></pre>
 
 <p>The chart options allow us to set the chart type, axis options and initial data.</p>
-
-<p>Multiple data series can be stacked on top of each other. This is how the SMA is overlaid on the OHLC data. Multiple Y axis&#39; can be stacked separately on top of each other, as is done in this example with the volume chart below the OHLC/SMA chart.</p>
-
+<p>Multiple data series can be stacked on top of each other. This is how the SMA is overlaid on the OHLC data. Multiple Y axis' can be stacked separately on top of each other, as is done in this example with the volume chart below the OHLC/SMA chart.</p>
 <p>In the example code I use the chart types: <a href="https://en.wikipedia.org/wiki/Candlestick_chart"><em>candlestick</em></a>, <em>line</em> and <em>column</em>. There are <a href="http://api.highcharts.com/highstock#plotOptions">many more chart types available</a>. The <a href="http://www.highcharts.com/stock/demo/ohlc">OHLC chart type</a> is another you might be interested in that is relevant to financial data.</p>
-
-<p>This example loads data asynchronously when the user zooms in on the data. Initially full data must be loaded so that Highstock has something to show in its <a href="http://api.highcharts.com/highstock#navigator">navigator</a>. The navigator allows the user to see the entire time series and zoom in on parts of it. It is very expensive to download full daily financial data for any company, therefore initially only monthly data is downloaded. Then as the user zooms in for a closer look weekly or daily data is downloaded as needed. This helps keep our data load minimal and our load time responsive.</p>
-
+<p>This example loads data asynchronously when the user zooms in on the data. Initially full data must be loaded so that Highstock has something to show in its <a href="http://api.highcharts.com/highstock#navigator">navigator</a>. The navigator allows the user to see the entire time series and zoom in on parts of it. It is very expensive to download full daily financial data for any company, therefore initially only monthly data is downloaded. Then as the user zooms in for a closer look weekly or daily data is downloaded as needed. This helps keep our data load minimal and our load time responsive. </p>
 <p>Highcharts supports asyncronous data download via the <a href="http://api.highcharts.com/highstock#xAxis.events.afterSetExtremes"><code>afterSetExtremes</code></a> event. You can also see a fairly simple example of this in the <a href="http://www.highcharts.com/stock/demo/lazy-loading">Highstock async loading demo</a>. It looks something like this:</p>
-
-<pre>
-<code>//
+<pre><code>//
 // Function called when the user changes the zoom level of the chart.
 // 
 var afterSetExtremes = function (event) {
@@ -124,47 +105,34 @@ var chartOptions = {
 };
 </code></pre>
 
-<h2><a id="pulling-data-from-yahoo" name="pulling-data-from-yahoo">Pulling data from Yahoo</a></h2>
-
+<h2>Pulling data from Yahoo</h2>
 <p>The Yahoo financial <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> is fantastic and possibly the only free financial API. It is a ready source of share market data. Unfortunately it can be difficult to get started as there seems to be little documentation besides community-contributed content.</p>
-
 <p>The basic <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Locator">URL</a> structure looks like this:</p>
-
 <p>http://ichart.yahoo.com/table.csv?s=<strong>&lt;company-code&gt;</strong></p>
-
 <p>For example you can pull full data (served in CSV format) for Microsoft with this URL: <a href="http://ichart.yahoo.com/table.csv?s=MSFT">http://ichart.yahoo.com/table.csv?s=MSFT</a> (click and see).</p>
-
 <p>The downloaded CSV file can be viewed in a text editor or Excel (or something similar).</p>
-
 <p>The URL can also have a <em>interval</em> parameter:</p>
-
 <p>http://ichart.yahoo.com/table.csv?s=&lt;company-code&gt;&amp;g=<strong>&lt;interval-code&gt;</strong></p>
-
 <p>Valid interval codes are:</p>
-
 <ul>
-	<li><strong><em>d</em></strong> for daily;</li>
-	<li><strong><em>w</em></strong> weekly; and</li>
-	<li><strong><em>m</em></strong> for monthly.</li>
+<li><strong><em>d</em></strong> for daily;</li>
+<li><strong><em>w</em></strong> weekly; and</li>
+<li><strong><em>m</em></strong> for monthly.</li>
 </ul>
-
-<p>For example to retrieve Microsoft data with a monthly interval: <a href="http://ichart.yahoo.com/table.csv?s=MSFT&amp;g=m">http://ichart.yahoo.com/table.csv?s=MSFT&amp;g=m</a></p>
-
+<p>For example to retrieve Microsoft data with a monthly interval:	<a href="http://ichart.yahoo.com/table.csv?s=MSFT&amp;g=m">http://ichart.yahoo.com/table.csv?s=MSFT&amp;g=m</a></p>
 <p>The URL can also have parameter that specifies a date range that constrains the returned data to a particular period of time:</p>
-
 <p>http://ichart.yahoo.com/table.csv?s=&lt;company-code&gt;&amp;a=<strong>&lt;from-month&gt;</strong>&amp;b=<strong>&lt;from-date&gt;<strong>&amp;c=</strong>&lt;from-year&gt;</strong>&amp;d=<strong>&lt;to-month&gt;</strong>&amp;e=<strong>&lt;to-date&gt;<strong>&amp;f=</strong>&lt;to-year&gt;</strong></p>
-
-<p>Note that Yahoo expects a zero-based month. This is the same as the <a href="http://www.w3schools.com/jsref/jsref_obj_date.asp">JavaScript Date class</a>.</p>
-
+<p>Note that Yahoo expects a zero-based month. This is the same as the <a href="http://www.w3schools.com/jsref/jsref_obj_date.asp">JavaScript Date class</a>. </p>
 <p>For example to retrieve Microsoft data for the last few months of 2015: <a href="http://ichart.yahoo.com/table.csv?s=MSFT&amp;a=9&amp;b=1&amp;c=2015&amp;d=11&amp;e=31&amp;f=2015">http://ichart.yahoo.com/table.csv?s=MSFT&amp;a=9&amp;b=1&amp;c=2015&amp;d=11&amp;e=31&amp;f=2015</a></p>
+<p>Of course, the example code doesn't directly hit the Yahoo API. <a href="#data-forge"><em>Data-Forge</em></a> has a convenient plugin <em><a href="https://github.com/data-forge/data-forge-from-yahoo">data-forge-from-yahoo</a></em>  to pull data from Yahoo. The <code>fromYahoo</code> function returns a promise that resolves to a <a href="https://github.com/real-serious-games/data-forge-js#data-frame">data frame</a> that contains the data returned from Yahoo, which looks like this: </p>
+<pre><code>var dataForge = require('data-forge');
+dataForge.use(require('data-forge-from-yahoo'));
 
-<p>Of course, the example code doesn&#39;t directly hit the Yahoo API. <a href="#data-forge"><em>Data-Forge</em></a> has a convenient plugin <em><a href="https://github.com/data-forge/data-forge-from-yahoo">data-forge-from-yahoo</a></em> to pull data from Yahoo. The <code>fromYahoo</code> function returns a promise that resolves to a <a href="https://github.com/real-serious-games/data-forge-js#data-frame">data frame</a> that contains the data returned from Yahoo, which looks like this:</p>
+var options = {
+    baseUrl: location.protocol + '//' + location.hostname + ':' + location.port + '/yahoo',
+};
 
-<pre>
-<code>var dataForge = require(&#39;data-forge&#39;);
-dataForge.use(require(&#39;data-forge-from-yahoo&#39;));
-
-dataForge.fromYahoo(&#39;MSFT&#39;)
+dataForge.fromYahoo('MSFT', options)
     .then(function (dataFrame) {
         console.log(dataFrame.take(5).toString());
     })
@@ -174,7 +142,6 @@ dataForge.fromYahoo(&#39;MSFT&#39;)
 </code></pre>
 
 <p>Output:</p>
-
 <pre>
 __index___  Date                                                            Open       High       Low        Close      Volume    Adj Close
 ----------  --------------------------------------------------------------  ---------  ---------  ---------  ---------  --------  ---------
@@ -184,78 +151,103 @@ __index___  Date                                                            Open
 3           Tue Dec 29 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  56.290001  56.849998  56.060001  56.549999  27489200  56.549999
 4           Mon Dec 28 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  55.349998  55.950001  54.98      55.950001  21698000  55.950001
 </pre>
+<p>The above code is meant to work under the browser. We can't hit the Yahoo directly due to <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">cross-original resource sharing (CORS)</a> restrictions, this is why we must use a proxy. As you can see <code>baseURL</code> is set to point to a proxy server. This same code will work under <a href="https://en.wikipedia.org/wiki/Node.js">Node.js</a>, but we won't need to set the <code>baseURL</code>, there is now CORS restriction so we can hit the Yahoo API directly from Node.js. </p>
+<h3>DIY Yahoo proxy (new 2016-04-04)</h3>
+<p>In the original version of this article I used a public CORS proxy to get around the CORS restriction. This didn't work every well. There were various problems such as the proxy not always being available. </p>
+<p>So I built my own very simple proxy server. It actual has the dual purpose of serving the example web app and being a proxy to retrieve data from the Yahoo API.</p>
+<p>This is a fairly simple Node.js application serving static pages with a simple REST API that is relayed to the Yahoo API: </p>
+<pre><code>var path = require('path');
+var express = require('express');
+var request = require('request-promise');
+var E = require('linq');
 
-<p>The above code will work either under <a href="https://en.wikipedia.org/wiki/Node.js">Node.js</a> or the browser. The main difference is the way Data-Forge is installed, which I&#39;ll cover in the next section.</p>
+var yahooBaseUrl = 'http://ichart.yahoo.com/table.csv';
 
-<p>Internally there is a major difference. Under the browser, due to <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">cross-original resource sharing (CORS)</a> restrictions, we can&#39;t directly pull data from the the Yahoo API the way we can under Node.js. For this reason a proxy URL specified to data-forge-from-yahoo that uses to proxy the Yahoo REST API. (Using <a href="http://cors.io">http://cors.io</a> as the proxy service). The proxy URL can also be set explicitly to any custom proxy URL desired by the user.</p>
+var app = express();
 
-<h2><a id="data-forge" name="data-forge">Data-Forge</a></h2>
+// Serve static files.
+var staticPath = path.join(__dirname, 'client');
+console.log(staticPath);
+app.use(express.static(staticPath));
 
-<p>This example uses <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a>, an open-source data analysis and transformation toolkit for JavaScript that is inspired by <a href="https://en.wikipedia.org/wiki/Pandas_(software)">Pandas</a> and <a href="https://en.wikipedia.org/wiki/Language_Integrated_Query">LINQ</a> (I&#39;m also working on a <a href="https://github.com/real-serious-games/data-forge-cs">C# version</a>). Data-Forge is a work in progress and is at the prototype stage, so please use with care. I&#39;m the main developer and keen to bring attention to it at this stage to elicit feedback and help solidify its direction. I&#39;m also working on a larger system for financial analysis, tracking investments and automation, the <em><a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a></em>, which is also a prototype and a work in progress.</p>
+// REST API that relays to the Yahoo API.
+app.get('/yahoo', function (req, res) {
 
+    var queryParams = E.from(Object.keys(req.query))
+        .select(function (paramName) {
+            return paramName + '=' + req.query[paramName];
+        })
+        .toArray()
+        .join('&amp;');
+
+    var url = yahooBaseUrl + '?' + queryParams;
+    request(url)
+        .then(function (result) {
+            res.set('Content-Type', 'text/csv');
+            res.send(result).end();
+        })
+        .catch(function (e) {
+            console.error(e)
+        }); 
+});
+
+var server = app.listen(process.env.PORT || 3000, function () {
+
+    var host = server.address().address
+    var port = server.address().port
+
+    console.log('Example app listening at http://%s:%s', host, port)
+});
+</code></pre>
+
+<h2>Data-Forge</h2>
+<p>This example uses <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a>, an open-source data analysis and transformation toolkit for JavaScript that is inspired by <a href="https://en.wikipedia.org/wiki/Pandas_(software)">Pandas</a> and <a href="https://en.wikipedia.org/wiki/Language_Integrated_Query">LINQ</a> (I'm also working on a <a href="https://github.com/real-serious-games/data-forge-cs">C# version</a>). Data-Forge is a work in progress and is at the prototype stage, so please use with care. I'm the main developer and keen to bring attention to it at this stage to elicit feedback and help solidify its direction. I'm also working on a larger system for financial analysis, tracking investments and automation, the <em><a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a></em>, which is also a prototype and a work in progress.</p>
 <p>You can install Data-Forge for the browser via <a href="http://bower.io/search/?q=data-forge">bower</a>:</p>
-
-<pre>
-<code>bower install --save data-forge
+<pre><code>bower install --save data-forge
 </code></pre>
 
 <p>Or for Node.js via <a href="https://www.npmjs.com/package/data-forge">npm</a>:</p>
-
-<pre>
-<code>npm install --save data-forge
+<pre><code>npm install --save data-forge
 </code></pre>
 
 <p>This example also has installed various plugins:</p>
-
-<pre>
-<code>bower install --save data-forge-from-yahoo
+<pre><code>bower install --save data-forge-from-yahoo
 bower install --save data-forge-to-highstock
 bower install --save data-forge-indicators
 </code></pre>
 
-<p>Or</p>
-
-<pre>
-<code>npm install --save data-forge-from-yahoo
+<p>Or </p>
+<pre><code>npm install --save data-forge-from-yahoo
 npm install --save data-forge-to-highstock
 npm install --save data-forge-indicators
 </code></pre>
 
 <p>To use Data-Forge in the browser you simply include the script files for Data-Forge and plugins in the HTML file:</p>
-
-<pre>
-<code>&lt;script src=&quot;bower_components/data-forge/data-forge.js&quot;&gt;&lt;/script&gt;
+<pre><code>&lt;script src=&quot;bower_components/data-forge/data-forge.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;bower_components/data-forge-from-yahoo/from-yahoo.dist.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;bower_components/data-forge-to-highstock/to-highstock.dist.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;bower_components/data-forge-indicators/indicators.dist.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 
 <p>For Node.js require in the main module then <em>use</em> the plugins:</p>
-
-<pre>
-<code>var dataForge = require(&#39;data-forge&#39;);
-dataForge.use(require(&#39;data-forge-from-yahoo&#39;));
-dataForge.use(require(&#39;data-forge-to-highstock&#39;));
-dataForge.use(require(&#39;data-forge-indicators&#39;)); 
+<pre><code>var dataForge = require('data-forge');
+dataForge.use(require('data-forge-from-yahoo'));
+dataForge.use(require('data-forge-to-highstock'));
+dataForge.use(require('data-forge-indicators')); 
 </code></pre>
 
 <p>Like a <a href="https://en.wikipedia.org/wiki/Swiss_Army_knife">swiss-army knife</a>, Data-Forge does many things, but what does data-forge do for us in this example?</p>
-
-<p>Let&#39;s see...</p>
-
+<p>Let's see...</p>
 <ul>
-	<li><a href="https://github.com/data-forge/data-forge-from-yahoo"><em>data-forge-from-yahoo</em></a> wraps up pulling data from Yahoo and delivering us a <em>data-frame</em>.</li>
-	<li>Data-Forge parses the CSV data returned from Yahoo and converts it to a data-frame.</li>
-	<li><a href="https://github.com/data-forge/data-forge-to-highstock"><em>data-forge-to-highstock</em></a> converts the data-frame to the format expected as by Highstock.</li>
-	<li><a href="https://github.com/data-forge/data-forge-indicators"><em>data-forge-indicators</em></a> contains many useful functions, in this example it is used to generate the <a href="#simple-moving-average">simple moving average</a> discussed in the next section.</li>
+<li><a href="https://github.com/data-forge/data-forge-from-yahoo"><em>data-forge-from-yahoo</em></a> wraps up pulling data from Yahoo and delivering us a <em>data-frame</em>.</li>
+<li>Data-Forge parses the CSV data returned from Yahoo and converts it to a data-frame.</li>
+<li><a href="https://github.com/data-forge/data-forge-to-highstock"><em>data-forge-to-highstock</em></a> converts the data-frame to the format expected as by Highstock.</li>
+<li><a href="https://github.com/data-forge/data-forge-indicators"><em>data-forge-indicators</em></a> contains many useful functions, in this example it is used to generate the <a href="#simple-moving-average">simple moving average</a> discussed in the next section.  
+</li>
 </ul>
-
-<h2><a id="simple-moving-average" name="simple-moving-average">Simple moving averag</a>e</h2>
-
+<h2>Simple moving average</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge <code>rollingWindow</code> function:</p>
-
-<pre>
-<code>var computeSMA = function (column, period) {
+<pre><code>var computeSMA = function (column, period) {
     return column.rollingWindow(period, 
         function (window) {
             return [
@@ -283,36 +275,27 @@ var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
 console.log(dataFrameWithSMA.toString());
 </code></pre>
 
-<h2><a id="event-handling-and-resize-to-fit" name="event-handling-and-resize-to-fit">Event handling and resize to fit</a></h2>
-
+<h2>Event handling and resize to fit</h2>
 <p>The example code relies on <a href="https://en.wikipedia.org/wiki/JQuery">jQuery</a> mostly for event handling. For example, basics like detecting <a href="https://api.jquery.com/click/">button clicks</a> and <a href="https://api.jquery.com/change/">changes</a> in input fields. In response to various events the Highstock chart is updated and re-rendered as necessary.</p>
-
-<p>The most interesting event handler is for the window resize event. It would be great if we could handle an event for a particular HTML element (eg the container div for our chart). However this doesn&#39;t appear to be possible and we must handle resize for the entire window update the chart accordingly. This isn&#39;t the most flexible approach but it works when you want your chart to be sized according to the size of the window (or near enough). It is surprisingly difficult to figure out how to do this and it doesn&#39;t feel like the most elegant solution, however like so many other decisions in web development it often comes down to <em>whatever works</em>.</p>
-
+<p>The most interesting event handler is for the window resize event. It would be great if we could handle an event for a particular HTML element (eg the container div for our chart). However this doesn't appear to be possible and we must handle resize for the entire window update the chart accordingly. This isn't the most flexible approach but it works when you want your chart to be sized according to the size of the window (or near enough). It is surprisingly difficult to figure out how to do this and it doesn't feel like the most elegant solution, however like so many other decisions in web development it often comes down to <em>whatever works</em>.</p>
 <p>So we end up with a simple event handler for window <a href="https://api.jquery.com/resize/"><em>resize</em></a>:</p>
-
-<pre>
-<code>$(window).resize(function() {
+<pre><code>$(window).resize(function() {
     resizeChart();
 });
 </code></pre>
 
-<p>The <code>resizeChart</code> function updates the size of the Highstock chart:</p>
-
-<pre>
-<code>var resizeChart = function () {
-    var chart = $(&#39;#container&#39;).highcharts();
+<p>The <code>resizeChart</code> function updates the size of the Highstock chart: </p>
+<pre><code>var resizeChart = function () {
+    var chart = $('#container').highcharts();
     chart.setSize($(window).width(), $(window).height()-50);
 };
 </code></pre>
 
-<p><code>resizeChart</code> is also called after chart creation to ensure that the chart is immediately set to the correct size. An unusual consequence of this is the that chart data is reloaded immediately after the initial data load (it doesn&#39;t happen when the chart&#39;s size is adjusted in the future). We don&#39;t want our data loading twice, that makes the app slower to load and kind of defeats the purpose of our optimized asynchronous loading. To counter this behaviour I modified <code>resizeChart</code> to set <code>resizingChart</code> to <code>true</code> while the resize is in progress:</p>
-
-<pre>
-<code>var resizeChart = function () {
+<p><code>resizeChart</code> is also called after chart creation to ensure that the chart is immediately set to the correct size. An unusual consequence of this is the that chart data is reloaded immediately after the initial data load (it doesn't happen when the chart's size is adjusted in the future). We don't want our data loading twice, that makes the app slower to load and kind of defeats the purpose of our optimized asynchronous loading. To counter this behaviour I modified <code>resizeChart</code> to set <code>resizingChart</code> to <code>true</code> while the resize is in progress:</p>
+<pre><code>var resizeChart = function () {
     try {
         resizingChart = true; // Track that we are resizing.
-        var chart = $(&#39;#container&#39;).highcharts();
+        var chart = $('#container').highcharts();
         chart.setSize($(window).width(), $(window).height()-50);            
     }
     finally {                   
@@ -324,8 +307,7 @@ console.log(dataFrameWithSMA.toString());
 </code></pre>
 
 <p>Now we have <code>resizingChart</code> to test and subsequently abort data loading when the chart is being resized. Not the most elegant solution, but a good workaround for odd behaviour from Highstock.</p>
-
-<h3><a id="resize-update-19-01-2016">UPDATE 19/01/2016</a></h3>
+<h3>UPDATE 19/01/2016</h3>
 <p>After recently realizing there was a rendering issue with the volume chart I contacted Highsoft for support. They got back to me very quickly with some suggestions, one of which worked so I've updated this article with the new information.</p>
 <p>As mentioned above, I was calling <code>resizeChart</code> immediately after creating the chart to force it to adopt the size of the window. Something about this was causing the rendering issue. I had already figured out that the issue was something to do with resizing. Resizing the window (which updates the chart size) was causing the rendering issue to disappear.</p>
 <p>Per Highsoft's recommendation I added code to set the size of the chart on creation, rather than sizing it after creation. This change was simple. Chart width and height are now specified in the chart options:</p>
@@ -342,21 +324,17 @@ console.log(dataFrameWithSMA.toString());
 
 <p>The chart's correct initial size is therefore set on creation and I was able to remove the subsequent call to <code>resizeChart</code>. Problem solved.</p>
 <p>Note that <code>resizeChart</code> is still used to adjust the chart size after the window is resized, but it is no longer needed to set the chart's initial size.</p>
-
-<h2><a id="conclusion" name="conclusion">Conclusion</a></h2>
-
-<p>Through this post I have introduced <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a> and the <a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a>. Data-Forge is an open-source data analysis and transformation toolkit. The Investment Tracker is platform for financial analysis and automation. Both are prototypes and work in progress and I&#39;ll appreciate constructive criticism.</p>
-
-<p>For Data-Forge I&#39;m looking for users and contributors. Please help drive this project forward in whatever way you can!</p>
-
-<p>In the example code I&#39;ve demonstrated how to retrieve financial data from Yahoo and visualise it using Highstock. I&#39;ve provided a brief overview of how the pieces fit together and shown how Data-Forge makes it all a bit simpler.</p>
-
-<h2><a id="resources" name="resources">Resources</a></h2>
-
+<h2>Azure deployment (new 2016-04-04)</h2>
+<p>After moving from a public CORS proxy to my own proxy server I needed somewhere to host the <a href="http://highstock-yahoo-demo.azurewebsites.net/">live demo</a>. I decide to deploy it as an <a href="https://en.wikipedia.org/wiki/Microsoft_Azure">Azure</a> <em>Web App</em>, on the lowest tier that's basically free which is useful for this kind of demo.</p>
+<p>When I was learnign how to deploy a Node.js app to Azure I built two small examples. The <a href="https://github.com/ashleydavis/simple-azure-deployment-test">first and simplest example</a> demonstrates how to roll out the simplest possible web page to an Azure Web App. The <a href="https://github.com/ashleydavis/nodejs-azure-deployment-test">second example</a> shows how to deploy out a simple Node.js app to Azure.</p>
+<h2>Conclusion</h2>
+<p>Through this post I have introduced <a href="https://github.com/real-serious-games/data-forge-js">Data-Forge</a> and the <a href="http://investment-tracker.cloudapp.net/">Investment Tracker</a>. Data-Forge is an open-source data analysis and transformation toolkit. The Investment Tracker is platform for financial analysis and automation. Both are prototypes and work in progress and I'll appreciate constructive criticism. </p>
+<p>For Data-Forge I'm looking for users and contributors. Please help drive this project forward in whatever way you can! </p>
+<p>In the example code I've demonstrated how to retrieve financial data from Yahoo and visualise it using Highstock. I've provided a brief overview of how the pieces fit together and shown how Data-Forge makes it all a bit simpler.</p>
+<h2>Resources</h2>
 <ul>
-	<li>Highstock demos: <a href="http://www.highcharts.com/stock/demo">http://www.highcharts.com/stock/demo</a></li>
-	<li>Highstock docs: <a href="http://www.highcharts.com/docs">http://www.highcharts.com/docs</a></li>
-	<li>Highstock API reference: <a href="http://api.highcharts.com/highstock">http://api.highcharts.com/highstock</a></li>
-	<li>Data-Forge: <a href="https://github.com/real-serious-games/data-forge-js">https://github.com/real-serious-games/data-forge-js</a></li>
-	<li>cors.io (CORS proxy): <a href="http://cors.io/">http://cors.io/</a></li>
+<li>Highstock demos: <a href="http://www.highcharts.com/stock/demo">http://www.highcharts.com/stock/demo</a></li>
+<li>Highstock docs: <a href="http://www.highcharts.com/docs">http://www.highcharts.com/docs</a></li>
+<li>Highstock API reference: <a href="http://api.highcharts.com/highstock">http://api.highcharts.com/highstock</a></li>
+<li>Data-Forge: <a href="https://github.com/real-serious-games/data-forge-js">https://github.com/real-serious-games/data-forge-js</a></li>
 </ul>

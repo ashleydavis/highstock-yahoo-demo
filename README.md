@@ -82,7 +82,7 @@ Highstock is a pure Javascript, client-side stock charting library that is free 
 
 For this example code I started with the [Highstock async loading demo](http://www.highcharts.com/stock/demo/lazy-loading). I also incorporated elements of the [candlestick and volume demo](http://www.highcharts.com/stock/demo/candlestick-and-volume).
 
-There are [many other demos](http://www.highcharts.com/stock/demo) of Highstock that give a good undestanding of its full capabilities. Highstock also has good [docs](http://www.highcharts.com/docs) and an [API](http://api.highcharts.com/highstock) reference. Read these docs for a full understand of Highstock.
+There are [many other demos](http://www.highcharts.com/stock/demo) of Highstock that give a good understanding of its full capabilities. Highstock also has good [docs](http://www.highcharts.com/docs) and an [API](http://api.highcharts.com/highstock) reference. Read these docs for a full understanding of Highstock.
 
 The basic setup for Highstock is quite simple. Use jQuery to get the element that will contain the chart and call the `highcharts` function. Pass in the options to configure the chart and provide data:
 
@@ -188,7 +188,7 @@ __index___  Date                                                            Open
 4           Mon Dec 28 2015 00:00:00 GMT+1000 (E. Australia Standard Time)  55.349998  55.950001  54.98      55.950001  21698000  55.950001
 </pre>
 
-The above code is meant to work under the browser. We can't hit the Yahoo directly due to [cross-original resource sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) restrictions, this is why we must use a proxy. As you can see `baseURL` is set to point to a proxy server. This same code will work under [Node.js](https://en.wikipedia.org/wiki/Node.js), but we won't need to set the `baseURL`, there is now CORS restriction so we can hit the Yahoo API directly from Node.js. 
+The above code is meant to work under the browser. We can't hit the Yahoo directly due to [cross-original resource sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) restrictions, this is why we must use a proxy. As you can see `baseURL` is set to point to a proxy server. This same code will work under [Node.js](https://en.wikipedia.org/wiki/Node.js), but we won't need to set the `baseURL`, there is no CORS restriction so we can hit the Yahoo API directly from Node.js. 
 
 ### DIY Yahoo proxy (new 2016-04-04)
 
@@ -385,7 +385,7 @@ Note that `resizeChart` is still used to adjust the chart size after the window 
 
 After moving from a public CORS proxy to my own proxy server I needed somewhere to host the [live demo](http://highstock-yahoo-demo.azurewebsites.net/). I decide to deploy it as an [Azure](https://en.wikipedia.org/wiki/Microsoft_Azure) *Web App*, on the lowest tier that's basically free which is useful for this kind of demo.
 
-While I was learning how to deploy a Node.js app to Azure I built two small examples. The [first and simplest example](https://github.com/ashleydavis/simple-azure-deployment-test) demonstrates how to roll out the simplest possible web page to an Azure Web App. The [second example](https://github.com/ashleydavis/nodejs-azure-deployment-test) shows how to deploy out a simple Node.js app to Azure.
+While I was learning how to deploy a Node.js app to Azure I built two small examples. The [first and simplest example](https://github.com/ashleydavis/simple-azure-deployment-test) demonstrates how to roll out the simplest possible web page to an Azure Web App. The [second example](https://github.com/ashleydavis/nodejs-azure-deployment-test) shows how to deploy a simple Node.js app to Azure.
 
 The github repo that hosts the code is setup to be directly deployed to Azure. 
 

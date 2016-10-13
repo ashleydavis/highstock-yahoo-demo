@@ -2,12 +2,13 @@
 	<li><a href="highstock-yahoo-demo.zip">Download demo - 3.2 MB</a></li>
 </ul>
 
-<p><a href="http://codecapers.github.io/highstock-yahoo-demo/">Click here for live demo</a>.</p>
+<p><a href="http://highstock-yahoo-demo.azurewebsites.net/">Click here for live demo (running on a free Azure instance, pls be patient)</a>.</p>
 
 <p><a href="https://github.com/codecapers/highstock-yahoo-demo">Code hosted on GitHub</a>.</p>
 
 <p><a href="http://codecapers.github.io/highstock-yahoo-demo/README.html">Article also hosted on GitHub</a>.</p>
 
+<h2>Contents</h2>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#getting-the-code">Getting the code</a></li>
@@ -27,7 +28,7 @@
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#resources">Resources</a></li>
 </ul>
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 <h2>Update 2016-04-04</h2>
 <p>I've removed the CORS server that I was using. This proved problematic so I no longer recommend the technique. The code for this article now includes a simple NodeJS proxy server for the Yahoo financial API. The live demo is now deployed on Azure. For details on this update please see the new sections below. </p>
 <h2>Introduction</h2>
@@ -248,21 +249,20 @@ dataForge.use(require('data-forge-indicators'));
 <h2>Simple moving average</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average">simple moving average (SMA)</a> is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge <code>rollingWindow</code> function:</p>
 <pre><code>var computeSMA = function (column, period) {
-    return column.rollingWindow(period, 
-        function (window) {
+    return column.rollingWindow(period)
+        .selectPairs(function (index, window) {
             return [
                 window.getIndex().last(),   // Index for row in new series. 
                 window.average(),           // Value for row in new series.
             ];
-        }
-    );
+        });
 };
 
 var dataFrame = ...
 var smaPeriod = 30;
 var close = dataFrame.getSeries('Close');
 var sma = computeSMA(close, smaPeriod);
-var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
+var dataFrameWithSMA = dataFrame.withSeries('SMA', sma);
 
 console.log(dataFrameWithSMA.toString());
 </code></pre>
@@ -270,7 +270,7 @@ console.log(dataFrameWithSMA.toString());
 <p><em>data-forge-indicators</em> provides a convenient function to compute the SMA, so using the code can be even simpler:</p>
 <pre><code>var smaPeriod= 30;
 var sma = dataFrame.getSeries('Close').sma(smaPeriod);
-var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
+var dataFrameWithSMA = dataFrame.withSeries('SMA', sma);
 
 console.log(dataFrameWithSMA.toString());
 </code></pre>

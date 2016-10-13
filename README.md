@@ -2,7 +2,7 @@
 
 A demo of [Highstock](http://www.highcharts.com/stock/demo) using [Data-Forge](https://github.com/Real-Serious-Games/data-forge-js) with financial data loaded from Yahoo.
 
-[Click here for live demo](http://highstock-yahoo-demo.azurewebsites.net/).
+[Click here for live demo (running on a free Azure instance, pls be patient)](http://highstock-yahoo-demo.azurewebsites.net/).
 
 This post is published on [Code Project](http://www.codeproject.com/Articles/1069489/Highstock-plus-Data-Forge-plus-Yahoo).
 
@@ -295,21 +295,20 @@ Let's see...
 A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average) is computed and overlaid as a line chart on the OHLC chart. Simple moving average is a basic financial indicator that smooths the frequent fluctations in the share market to allow broader trends to be identified. This is very simple to achieve using the Data-Forge `rollingWindow` function:
 
 	var computeSMA = function (column, period) {
-        return column.rollingWindow(period, 
-			function (window) {
+		return column.rollingWindow(period)
+			.selectPairs(function (index, window) {
                 return [
 					window.getIndex().last(),	// Index for row in new series. 
 					window.average(),			// Value for row in new series.
 				];
-            }
-		);
+            });
 	};
 
 	var dataFrame = ...
 	var smaPeriod = 30;
 	var close = dataFrame.getSeries('Close');
 	var sma = computeSMA(close, smaPeriod);
-	var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
+	var dataFrameWithSMA = dataFrame.withSeries('SMA', sma);
 
 	console.log(dataFrameWithSMA.toString());
 
@@ -317,7 +316,7 @@ A [simple moving average (SMA)](https://en.wikipedia.org/wiki/Moving_average#Sim
 
 	var smaPeriod= 30;
 	var sma = dataFrame.getSeries('Close').sma(smaPeriod);
-	var dataFrameWithSMA = dataFrame.setSeries('SMA', sma);
+	var dataFrameWithSMA = dataFrame.withSeries('SMA', sma);
 
 	console.log(dataFrameWithSMA.toString());
 

@@ -28,6 +28,10 @@ This post is published on [Code Project](http://www.codeproject.com/Articles/106
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Update 2016-10-13 
+
+Updated to latest version of Data-Forge.
+
 ## Update 2016-04-04
 
 I've removed the CORS server that I was using. This proved problematic so I no longer recommend the technique. The code for this article now includes a simple NodeJS proxy server for the Yahoo financial API. The live demo is now deployed on Azure. For details on this update please see the new sections below. 

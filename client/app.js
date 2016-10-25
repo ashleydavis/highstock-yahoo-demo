@@ -113,8 +113,8 @@ $(function() {
                 interval: interval,
             })
             .then(function (dataFrame) {
-                var price = dataFrame.getColumnsSubset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
-                var volume = dataFrame.getColumnsSubset(["Date", "Volume"]).toHighstock();
+                var price = dataFrame.subset(["Date", "Open", "High", "Low", "Close"]).toHighstockOHLC();
+                var volume = dataFrame.subset(["Date", "Volume"]).toHighstock();
 
                 chart.series[0].setData(price);
                 chart.series[2].setData(volume);

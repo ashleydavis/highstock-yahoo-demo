@@ -10,6 +10,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "data-forge": "^0.5.0",
     "express": "^4.13.4",
     "linq": "^3.0.5",
     "request-promise": "^2.0.1"

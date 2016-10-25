@@ -20,9 +20,9 @@
     "linqjs": "~3.0.5",
     "chai": "~3.4.2",
     "moment": "~2.10.6",
-    "data-forge": "0.4.0",
     "data-forge-from-yahoo": "0.0.20",
     "data-forge-to-highstock": "0.0.17",
-    "data-forge-indicators": "0.0.17"
+    "data-forge-indicators": "0.0.18",
+    "data-forge": "^0.5.0"
   }
 }

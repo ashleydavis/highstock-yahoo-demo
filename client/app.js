@@ -22,9 +22,9 @@ $(function() {
     //
     var resizingChart = false;
 
-	/*
-	 * Generate a simple moving average from the series.
-	 */
+	//
+	// Generate a simple moving average time series from the input series.
+	//
     var computeSmaSeries = function (series, period) {
 
         return series.rollingWindow(period)

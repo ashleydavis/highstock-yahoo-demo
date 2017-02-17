@@ -27,8 +27,6 @@ $(function() {
 	 */
     var computeSmaSeries = function (series, period) {
 
-    	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
-
         return series.rollingWindow(period)
             .asPairs()
             .select(function (pair) {

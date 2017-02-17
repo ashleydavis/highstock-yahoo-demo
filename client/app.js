@@ -22,6 +22,23 @@ $(function() {
     //
     var resizingChart = false;
 
+	/*
+	 * Generate a simple moving average from the series.
+	 */
+    var sma = function (series, period) {
+
+    	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
+
+        return series.rollingWindow(period)
+            .asPairs()
+            .select(function (pair) {
+                var window = pair[1];
+                return [window.getIndex().last(), window.average()];
+            })
+            .asValues()
+            ;
+    };
+
     //
     // Load data in format required by highstock.
     //
@@ -132,8 +149,7 @@ $(function() {
     // Compute simple moving average of the price.
     //
     var computeSMA = function (chart, dataFrame) {
-        var sma = dataFrame.getSeries("Close")
-            .sma(smaPeriod)
+        var sma = sma(dataFrame.getSeries("Close"), smaPeriod)
             .toHighstock();
         chart.series[1].setData(sma);
     };
@@ -166,8 +182,7 @@ $(function() {
             .then(function (dataFrame) {
                 var price = dataFrame.toHighstockOHLC();
                 var volume = dataFrame.getSeries("Volume").toHighstock();
-                var sma = dataFrame.getSeries("Close")
-                    .sma(smaPeriod)
+                var sma = sma(dataFrame.getSeries("Close"), smaPeriod)
                     .toHighstock();
 
                 var groupingUnits = [

@@ -25,7 +25,7 @@ $(function() {
 	/*
 	 * Generate a simple moving average from the series.
 	 */
-    var sma = function (series, period) {
+    var computeSmaSeries = function (series, period) {
 
     	assert.isNumber(period, "Expected 'period' parameter to 'sma' to be a number that specifies the time period of the moving average.");
 
@@ -149,7 +149,7 @@ $(function() {
     // Compute simple moving average of the price.
     //
     var computeSMA = function (chart, dataFrame) {
-        var sma = sma(dataFrame.getSeries("Close"), smaPeriod)
+        var sma = computeSmaSeries(dataFrame.getSeries("Close"), smaPeriod)
             .toHighstock();
         chart.series[1].setData(sma);
     };
@@ -182,7 +182,7 @@ $(function() {
             .then(function (dataFrame) {
                 var price = dataFrame.toHighstockOHLC();
                 var volume = dataFrame.getSeries("Volume").toHighstock();
-                var sma = sma(dataFrame.getSeries("Close"), smaPeriod)
+                var sma = computeSmaSeries(dataFrame.getSeries("Close"), smaPeriod)
                     .toHighstock();
 
                 var groupingUnits = [
